@@ -1,0 +1,30 @@
+<h2>Create Reservation</h2>
+
+<form (ngSubmit)="createReservation()">
+  <div>
+    <label>Start Time</label>
+    <input type="datetime-local" [(ngModel)]="startTime" name="startTime" required />
+  </div>
+
+  <div>
+    <label>End Time</label>
+    <input type="datetime-local" [(ngModel)]="endTime" name="endTime" required />
+  </div>
+
+  <div>
+    <label>Activity</label>
+    <input type="text" [(ngModel)]="activity" name="activity" required />
+  </div>
+
+  <div>
+    <label>Hardware</label>
+    <input type="text" [(ngModel)]="hardware" name="hardware" required />
+  </div>
+
+  <div>
+    <label>Software</label>
+    <input type="text" [(ngModel)]="software" name="software" required />
+  </div>
+
+  <button type="submit">Create</button>
+</form>
