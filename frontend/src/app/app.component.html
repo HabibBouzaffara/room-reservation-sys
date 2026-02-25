@@ -1,11 +1,21 @@
-<h1>TSP Room Booking</h1>
-
-<nav>
-  <a routerLink="/login">Login</a> | <a routerLink="/register">Register</a> |
-  <a routerLink="/reservations">Reservations</a> |
-  <a routerLink="/create">Create</a>
+<nav class="navbar animate-fade-in">
+  <div class="logo">
+    <a routerLink="/" style="text-decoration: none; color: inherit;">TSP Rooms</a>
+  </div>
+  <div class="nav-links">
+    <ng-container *ngIf="authService.isAuthenticated(); else unauthLinks">
+      <a routerLink="/reservations">Reservations</a>
+      <a routerLink="/reservations/new">Book Room</a>
+      <a *ngIf="authService.getRole() === 'ADMIN'" routerLink="/history">History</a>
+      <a href="javascript:void(0)" (click)="logout()">Logout</a>
+    </ng-container>
+    <ng-template #unauthLinks>
+      <a routerLink="/login">Login</a>
+      <a routerLink="/register">Register</a>
+    </ng-template>
+  </div>
 </nav>
 
-<hr />
-
-<router-outlet></router-outlet>
+<main class="container">
+  <router-outlet></router-outlet>
+</main>

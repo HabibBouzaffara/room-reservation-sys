@@ -1,0 +1,43 @@
+<div class="flex justify-between items-center" style="margin-bottom: 2rem;">
+  <h2>System History logs</h2>
+</div>
+
+<div class="card-grid" style="grid-template-columns: 1fr;">
+  <div class="card glass-panel" *ngFor="let log of historyLogs" style="padding: 1rem 2rem;">
+    <div class="flex justify-between items-center" style="margin-bottom: 0.5rem;">
+      <span class="badge" [ngClass]="{
+          'badge-success': log.action === 'CREATE_RESERVATION',
+          'badge-primary': log.action === 'UPDATE_RESERVATION',
+          'badge-warning': log.action === 'DELETE_RESERVATION'
+        }">
+        {{ log.action }}
+      </span>
+      <span style="font-size: 0.85rem; color: var(--text-secondary);">
+        {{ log.timestamp | date:'medium' }}
+      </span>
+    </div>
+
+    <div style="margin-bottom: 0.25rem;">
+      <strong>Reservation ID:</strong> {{ log.reservationId }}
+    </div>
+    <div style="margin-bottom: 0.25rem;">
+      <strong>Performed By (UserID):</strong> {{ log.performedBy }}
+    </div>
+
+    <div class="flex gap-4" style="margin-top: 1rem;" *ngIf="log.action !== 'DELETE_RESERVATION'">
+      <div style="flex: 1; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+        <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">Old Value</h4>
+        <pre style="margin: 0; font-size: 0.8rem; overflow: auto; color: var(--text-secondary);">{{ log.oldValue | json }}</pre>
+      </div>
+
+      <div style="flex: 1; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+        <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">New Value</h4>
+        <pre style="margin: 0; font-size: 0.8rem; overflow: auto; color: var(--text-color);">{{ log.newValue | json }}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="historyLogs.length === 0" style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
+    <p>No history logs available.</p>
+  </div>
+</div>

@@ -1,20 +1,26 @@
-<h2>Register</h2>
+<div class="glass-panel" style="max-width: 400px; margin: 4rem auto;">
+  <h2 style="text-align: center; margin-bottom: 2rem; color: var(--secondary-color);">Create an Account</h2>
 
-<form (ngSubmit)="register()">
-  <div>
-    <label>Name</label>
-    <input type="text" [(ngModel)]="name" name="name" required />
-  </div>
+  <form (ngSubmit)="register()">
+    <div>
+      <label>Full Name</label>
+      <input type="text" [(ngModel)]="name" name="name" required placeholder="John Doe" />
+    </div>
 
-  <div>
-    <label>Email</label>
-    <input type="email" [(ngModel)]="email" name="email" required />
-  </div>
+    <div>
+      <label>Email Address</label>
+      <input type="email" [(ngModel)]="email" name="email" required placeholder="you@example.com" />
+    </div>
 
-  <div>
-    <label>Password</label>
-    <input type="password" [(ngModel)]="password" name="password" required />
-  </div>
+    <div>
+      <label>Password</label>
+      <input type="password" [(ngModel)]="password" name="password" required placeholder="••••••••" />
+    </div>
 
-  <button type="submit">Register</button>
-</form>
+    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Register</button>
+  </form>
+
+  <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
+    Already have an account? <a routerLink="/login" style="color: var(--info-color); text-decoration: none;">Login here</a>
+  </p>
+</div>

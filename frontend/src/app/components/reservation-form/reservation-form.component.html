@@ -1,30 +1,43 @@
-<h2>Create Reservation</h2>
+<div class="glass-panel" style="max-width: 600px; margin: 2rem auto;">
+  <h2 style="margin-bottom: 2rem; color: var(--primary-color);">
+    {{ isEditMode ? 'Edit Reservation' : 'Book a Room' }}
+  </h2>
 
-<form (ngSubmit)="createReservation()">
-  <div>
-    <label>Start Time</label>
-    <input type="datetime-local" [(ngModel)]="startTime" name="startTime" required />
-  </div>
+  <form (ngSubmit)="saveReservation()">
+    <div class="flex flex-col gap-2" style="margin-bottom: 1.5rem;">
+      <div style="flex:1">
+        <label>Start Time *</label>
+        <input type="datetime-local" [(ngModel)]="startTime" name="startTime" required />
+      </div>
 
-  <div>
-    <label>End Time</label>
-    <input type="datetime-local" [(ngModel)]="endTime" name="endTime" required />
-  </div>
+      <div style="flex:1">
+        <label>End Time *</label>
+        <input type="datetime-local" [(ngModel)]="endTime" name="endTime" required />
+      </div>
+    </div>
 
-  <div>
-    <label>Activity</label>
-    <input type="text" [(ngModel)]="activity" name="activity" required />
-  </div>
+    <div>
+      <label>Activity *</label>
+      <input type="text" [(ngModel)]="activity" name="activity" placeholder="E.g. Web Development Workshop" required />
+    </div>
 
-  <div>
-    <label>Hardware</label>
-    <input type="text" [(ngModel)]="hardware" name="hardware" required />
-  </div>
+    <div>
+      <label>Hardware needed *</label>
+      <input type="text" [(ngModel)]="hardware" name="hardware" placeholder="E.g. 5 Laptops, Projector" required />
+    </div>
 
-  <div>
-    <label>Software</label>
-    <input type="text" [(ngModel)]="software" name="software" required />
-  </div>
+    <div>
+      <label>Software needed *</label>
+      <input type="text" [(ngModel)]="software" name="software" placeholder="E.g. Node.js, VS Code" required />
+    </div>
 
-  <button type="submit">Create</button>
-</form>
+    <div class="flex gap-2" style="margin-top: 2rem;">
+      <button type="submit" class="btn" style="flex:1">
+        {{ isEditMode ? 'Save Changes' : 'Confirm Booking' }}
+      </button>
+      <button type="button" class="btn btn-secondary" style="flex:1" routerLink="/reservations">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

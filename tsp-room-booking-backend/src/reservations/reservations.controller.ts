@@ -46,8 +46,26 @@ export class ReservationsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.reservationsService.findOne(+id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':id')
+  update(
+    @Param('id') id: string,
+    @Body() dto: Partial<CreateReservationDto>,
+    @Request() req: RequestWithUser,
+  ) {
+    const isAdmin = req.user.role === 'ADMIN';
+    return this.reservationsService.update(+id, dto, req.user.id, isAdmin);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string, @Request() req) {
-    return this.reservationsService.remove(+id, req.user.id, req.user.role);
+  remove(@Param('id') id: string, @Request() req: RequestWithUser) {
+    const isAdmin = req.user.role === 'ADMIN';
+    return this.reservationsService.remove(+id, req.user.id, isAdmin);
   }
 }

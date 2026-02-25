@@ -1,15 +1,21 @@
-<h2>Login</h2>
+<div class="glass-panel" style="max-width: 400px; margin: 4rem auto;">
+  <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">Welcome Back</h2>
 
-<form (ngSubmit)="login()">
-  <div>
-    <label>Email</label>
-    <input type="email" [(ngModel)]="email" name="email" required />
-  </div>
+  <form (ngSubmit)="login()">
+    <div>
+      <label>Email Address</label>
+      <input type="email" [(ngModel)]="email" name="email" required placeholder="you@example.com" />
+    </div>
 
-  <div>
-    <label>Password</label>
-    <input type="password" [(ngModel)]="password" name="password" required />
-  </div>
+    <div>
+      <label>Password</label>
+      <input type="password" [(ngModel)]="password" name="password" required placeholder="••••••••" />
+    </div>
 
-  <button type="submit">Login</button>
-</form>
+    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Login</button>
+  </form>
+
+  <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
+    Don't have an account? <a routerLink="/register" style="color: var(--info-color); text-decoration: none;">Register here</a>
+  </p>
+</div>

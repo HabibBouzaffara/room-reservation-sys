@@ -12,6 +12,7 @@ import { ReservationDetailComponent } from './components/reservation-detail/rese
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { HistoryComponent } from './components/history/history.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
     ReservationListComponent,
     ReservationDetailComponent,
     AdminDashboardComponent,
+    HistoryComponent,
   ],
   imports: [
     BrowserModule,

@@ -110,6 +110,89 @@ export class ReservationsService {
     return res;
   }
 
+  async update(id: number, dto: Partial<CreateReservationDto>, userId: number, isAdmin: boolean) {
+    const res = await this.prisma.reservation.findUnique({
+      where: { id },
+    });
+
+    if (!res) {
+      throw new BadRequestException('Reservation not found');
+    }
+
+    if (!isAdmin && res.userId !== userId) {
+      throw new BadRequestException('You cannot modify this reservation');
+    }
+
+    const buffer = await this.prisma.reservation.findFirst({
+      where: {
+        startTime: res.endTime,
+        type: 'BUFFER',
+      },
+    });
+
+    const newStart = dto.startTime ? new Date(dto.startTime) : res.startTime;
+    const newEnd = dto.endTime ? new Date(dto.endTime) : res.endTime;
+
+    if (dto.startTime || dto.endTime) {
+      const duration = (newEnd.getTime() - newStart.getTime()) / 60000;
+      if (duration < 30) {
+        throw new BadRequestException('Minimum reservation is 30 minutes');
+      }
+
+      const excludeIds = [res.id];
+      if (buffer) excludeIds.push(buffer.id);
+
+      const overlap = await this.prisma.reservation.findFirst({
+        where: {
+          id: { notIn: excludeIds },
+          startTime: { lt: newEnd },
+          endTime: { gt: newStart },
+        },
+      });
+
+      if (overlap) {
+        throw new BadRequestException('Time slot already reserved');
+      }
+    }
+
+    const updated = await this.prisma.reservation.update({
+      where: { id },
+      data: {
+        startTime: newStart,
+        endTime: newEnd,
+        activity: dto.activity ?? res.activity,
+        hardware: dto.hardware ?? res.hardware,
+        software: dto.software ?? res.software,
+      },
+    });
+
+    let updatedBuffer: any = null;
+    if (buffer && (dto.startTime || dto.endTime)) {
+      updatedBuffer = await this.prisma.reservation.update({
+        where: { id: buffer.id },
+        data: {
+          startTime: newEnd,
+          endTime: new Date(newEnd.getTime() + 10 * 60000),
+        },
+      });
+    }
+
+    await this.prisma.history.create({
+      data: {
+        action: 'UPDATE_RESERVATION',
+        reservationId: id,
+        performedBy: userId,
+        oldValue: res as unknown as Prisma.InputJsonValue,
+        newValue: {
+          reservation: updated,
+          buffer: updatedBuffer ?? buffer,
+        } as unknown as Prisma.InputJsonValue,
+      },
+    });
+
+    return updated;
+  }
+
   // Delete reservation (only owner or admin)
   async remove(id: number, userId: number, isAdmin: boolean) {
     const res = await this.prisma.reservation.findUnique({
@@ -133,7 +216,7 @@ export class ReservationsService {
         action: 'DELETE_RESERVATION',
         reservationId: id,
         performedBy: userId,
-        oldValue: res,
+        oldValue: res as unknown as Prisma.InputJsonValue,
         newValue: Prisma.JsonNull,
       },
     });
