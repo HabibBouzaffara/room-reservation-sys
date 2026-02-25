@@ -48,3 +48,13 @@ enum ReservationType {
   NORMAL
   BUFFER
 }
+
+model Hardware {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+}
+
+model Software {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+}

@@ -18,17 +18,31 @@
 
     <div>
       <label>Activity *</label>
-      <input type="text" [(ngModel)]="activity" name="activity" placeholder="E.g. Web Development Workshop" required />
+      <select [(ngModel)]="activityType" name="activityType" required style="margin-bottom: 1rem; width: 100%; padding: 0.75rem 1rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
+        <option value="" disabled selected>Select an activity</option>
+        <option *ngFor="let act of activities" [value]="act">{{ act }}</option>
+      </select>
+    </div>
+
+    <div *ngIf="activityType === 'Other'" style="margin-bottom: 1rem;">
+      <label>Activity Description *</label>
+      <input type="text" [(ngModel)]="activityDesc" name="activityDesc" placeholder="Describe your activity" required />
     </div>
 
     <div>
       <label>Hardware needed *</label>
-      <input type="text" [(ngModel)]="hardware" name="hardware" placeholder="E.g. 5 Laptops, Projector" required />
+      <input type="text" list="hardwares" [(ngModel)]="hardware" name="hardware" placeholder="E.g. D5, D4" required />
+      <datalist id="hardwares">
+        <option *ngFor="let hw of hardwareList" [value]="hw.name"></option>
+      </datalist>
     </div>
 
     <div>
       <label>Software needed *</label>
-      <input type="text" [(ngModel)]="software" name="software" placeholder="E.g. Node.js, VS Code" required />
+      <input type="text" list="softwares" [(ngModel)]="software" name="software" placeholder="E.g. 102.10.20, XNF" required />
+      <datalist id="softwares">
+        <option *ngFor="let sw of softwareList" [value]="sw.name"></option>
+      </datalist>
     </div>
 
     <div class="flex gap-2" style="margin-top: 2rem;">

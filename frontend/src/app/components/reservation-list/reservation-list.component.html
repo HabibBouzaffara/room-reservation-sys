@@ -25,7 +25,19 @@
                 <div class="day-date">{{ d.date | date:'mediumDate' }}</div>
              </div>
              
-             <div class="day-grid-container">
+             <div class="day-grid-container"
+                  (mousedown)="onMouseDown($event, d)"
+                  (mousemove)="onMouseMove($event, d)"
+                  (mouseup)="onMouseUp($event, d)"
+                  (mouseleave)="isDragging = false">
+
+                <!-- Drag Selection Overlay -->
+                <div *ngIf="isDragging && dragDay === d"
+                     class="drag-selection-box"
+                     [style.top.px]="getDragBoxTop()"
+                     [style.height.px]="getDragBoxHeight()">
+                </div>
+
                 <!-- Background grid lines -->
                 <div class="grid-line" *ngFor="let t of timeLabels" [style.height.px]="60 * PIXELS_PER_MINUTE"></div>
                 

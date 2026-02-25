@@ -172,3 +172,18 @@
 .res-actions button:hover {
   background: var(--primary-color);
 }
+
+.drag-selection-box {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  background: rgba(99, 102, 241, 0.3);
+  border: 1px dashed var(--primary-color);
+  border-radius: 4px;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.grid-line {
+  pointer-events: none;
+}

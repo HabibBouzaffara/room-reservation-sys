@@ -152,4 +152,102 @@ export class ReservationListComponent implements OnInit {
       });
     }
   }
+
+  isDragging = false;
+  dragDay: any = null;
+  dragStartY = 0;
+  dragCurrentY = 0;
+
+  onMouseDown(event: MouseEvent, day: any) {
+    if (event.button !== 0) return; // Only left click
+    
+    // If clicking on an existing reservation, don't start dragging
+    const target = event.target as HTMLElement;
+    if (target.closest('.reservation-card')) return;
+
+    this.isDragging = true;
+    this.dragDay = day;
+    
+    const container = event.currentTarget as HTMLElement;
+    const rect = container.getBoundingClientRect();
+    this.dragStartY = event.clientY - rect.top;
+    this.dragCurrentY = this.dragStartY;
+  }
+
+  onMouseMove(event: MouseEvent, day: any) {
+    if (!this.isDragging || this.dragDay !== day) return;
+    const container = event.currentTarget as HTMLElement;
+    const rect = container.getBoundingClientRect();
+    this.dragCurrentY = event.clientY - rect.top;
+  }
+
+  onMouseUp(event: MouseEvent, day: any) {
+    if (!this.isDragging) return;
+    this.isDragging = false;
+    
+    let y1 = Math.min(this.dragStartY, this.dragCurrentY);
+    let y2 = Math.max(this.dragStartY, this.dragCurrentY);
+
+    if (y2 - y1 < 10) { 
+      y2 = y1 + 60 * this.PIXELS_PER_MINUTE; // Default 1 hour
+    }
+
+    const startMins = Math.round((y1 / this.PIXELS_PER_MINUTE) / 10) * 10;
+    const endMins = Math.round((y2 / this.PIXELS_PER_MINUTE) / 10) * 10;
+
+    const startHours = this.START_HOUR + Math.floor(startMins / 60);
+    const sMins = startMins % 60;
+    
+    const endHours = this.START_HOUR + Math.floor(endMins / 60);
+    const eMins = endMins % 60;
+
+    let startTime = new Date(day.date);
+    startTime.setHours(startHours, sMins, 0, 0);
+
+    let endTime = new Date(day.date);
+    endTime.setHours(endHours, eMins, 0, 0);
+
+    const reservations = day.reservations.sort((a: any, b: any) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+    
+    for (let r of reservations) {
+      const rStart = new Date(r.startTime);
+      const rEnd = new Date(r.endTime);
+      
+      if (startTime >= rStart && startTime < rEnd) {
+         startTime = rEnd;
+      }
+      
+      if (startTime < rStart && endTime > rStart) {
+         endTime = rStart;
+      }
+    }
+
+    const diffMins = (endTime.getTime() - startTime.getTime()) / 60000;
+    if (diffMins < 60) {
+       endTime = new Date(startTime.getTime() + 60 * 60000);
+       
+       for (let r of reservations) {
+          const rStart = new Date(r.startTime);
+          if (startTime < rStart && endTime > rStart) {
+             alert('Not enough free time slot for a 1-hour reservation.');
+             return;
+          }
+       }
+    }
+
+    this.router.navigate(['/reservations/new'], {
+      queryParams: {
+        start: startTime.toISOString(),
+        end: endTime.toISOString()
+      }
+    });
+  }
+
+  getDragBoxTop(): number {
+    return Math.min(this.dragStartY, this.dragCurrentY);
+  }
+
+  getDragBoxHeight(): number {
+    return Math.abs(this.dragCurrentY - this.dragStartY);
+  }
 }

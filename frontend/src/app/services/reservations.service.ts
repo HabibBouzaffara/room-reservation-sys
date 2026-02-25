@@ -33,4 +33,12 @@ export class ReservationsService {
   getHistory(): Observable<any> {
     return this.http.get('http://localhost:3000/history');
   }
+
+  getHardware(): Observable<any> {
+    return this.http.get('http://localhost:3000/sysconfig/hardware');
+  }
+
+  getSoftware(): Observable<any> {
+    return this.http.get('http://localhost:3000/sysconfig/software');
+  }
 }

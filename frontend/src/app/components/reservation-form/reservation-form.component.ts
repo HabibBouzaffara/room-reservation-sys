@@ -12,9 +12,17 @@ export class ReservationFormComponent implements OnInit {
 
   startTime = '';
   endTime = '';
-  activity = '';
+  
+  activityType = '';
+  activityDesc = '';
+  activity = ''; // Final combined string
+  
   hardware = '';
   software = '';
+
+  hardwareList: any[] = [];
+  softwareList: any[] = [];
+  activities: string[] = ['FV', 'Coverage', 'Pr testing', 'DV', 'Intake', 'Fusi', 'Workshop', 'Other'];
 
   constructor(
     private reservationsService: ReservationsService,
@@ -23,12 +31,33 @@ export class ReservationFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const startQ = this.route.snapshot.queryParamMap.get('start');
+    const endQ = this.route.snapshot.queryParamMap.get('end');
+
+    if (startQ) {
+       const start = new Date(startQ);
+       start.setMinutes(start.getMinutes() - start.getTimezoneOffset());
+       this.startTime = start.toISOString().slice(0, 16);
+    }
+    if (endQ) {
+       const end = new Date(endQ);
+       end.setMinutes(end.getMinutes() - end.getTimezoneOffset());
+       this.endTime = end.toISOString().slice(0, 16);
+    }
+
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.isEditMode = true;
       this.reservationId = +idParam;
       this.loadReservationData(this.reservationId);
     }
+
+    this.loadSysConfig();
+  }
+
+  loadSysConfig() {
+    this.reservationsService.getHardware().subscribe(data => this.hardwareList = data || []);
+    this.reservationsService.getSoftware().subscribe(data => this.softwareList = data || []);
   }
 
   loadReservationData(id: number) {
@@ -45,7 +74,14 @@ export class ReservationFormComponent implements OnInit {
           end.setMinutes(end.getMinutes() - end.getTimezoneOffset());
           this.endTime = end.toISOString().slice(0, 16);
         }
-        this.activity = data.activity;
+
+        if (this.activities.includes(data.activity)) {
+          this.activityType = data.activity;
+        } else {
+          this.activityType = 'Other';
+          this.activityDesc = data.activity;
+        }
+
         this.hardware = data.hardware;
         this.software = data.software;
       },
@@ -57,10 +93,12 @@ export class ReservationFormComponent implements OnInit {
   }
 
   saveReservation() {
+    const finalActivity = this.activityType === 'Other' ? this.activityDesc : this.activityType;
+
     const reservationData = {
       startTime: new Date(this.startTime).toISOString(),
       endTime: new Date(this.endTime).toISOString(),
-      activity: this.activity,
+      activity: finalActivity,
       hardware: this.hardware,
       software: this.software,
     };
