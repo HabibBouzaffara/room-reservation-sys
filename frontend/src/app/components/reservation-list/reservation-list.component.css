@@ -1,0 +1,174 @@
+.calendar-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 1rem;
+}
+
+.calendar-wrapper {
+  display: flex;
+  min-width: max-content;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.time-column {
+  width: 60px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.time-header-space {
+  height: 80px; /* Header height matching day headers + week header */
+}
+
+.time-labels-container {
+  position: relative;
+}
+
+.time-label {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  border-right: 1px solid var(--glass-border);
+  text-align: right;
+  padding-right: 0.5rem;
+  box-sizing: border-box;
+}
+
+.week-group {
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid var(--primary-color);
+  margin-left: -2px; /* Overlap border */
+}
+
+.week-header {
+  text-align: center;
+  font-weight: bold;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--glass-border);
+  border-right: 1px solid var(--glass-border);
+  font-size: 0.9rem;
+  height: 35px;
+}
+
+.days-row {
+  display: flex;
+}
+
+.day-column {
+  width: 180px; /* fixed width for columns */
+  flex-shrink: 0;
+  border-right: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.day-header {
+  height: 45px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.day-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.day-grid-container {
+  position: relative;
+  flex-grow: 1;
+}
+
+.grid-line {
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+}
+
+.reservation-card {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  border-radius: 6px;
+  padding: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  transition: transform 0.2s;
+  cursor: default;
+}
+
+.reservation-card:hover {
+  z-index: 20;
+  transform: scale(1.02);
+}
+
+.res-normal {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid var(--primary-color);
+}
+
+.res-buffer {
+  background: rgba(59, 130, 246, 0.4);
+  backdrop-filter: blur(4px);
+  border-left: 4px solid var(--info-color);
+  justify-content: center;
+  align-items: center;
+}
+
+.buffer-content {
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.res-title {
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.res-body {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.res-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 0.25rem;
+  justify-content: flex-end;
+}
+
+.res-actions button {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s;
+}
+
+.res-actions button:hover {
+  background: var(--primary-color);
+}

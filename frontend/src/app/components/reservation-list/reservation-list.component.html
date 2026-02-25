@@ -1,46 +1,59 @@
 <div class="flex justify-between items-center" style="margin-bottom: 2rem;">
-  <h2>All Reservations</h2>
+  <h2>Weekly Room Overview</h2>
   <button class="btn" routerLink="/reservations/new">Book a Room</button>
 </div>
 
-<div *ngIf="reservations.length === 0" style="text-align: center; color: var(--text-secondary); margin-top: 3rem;">
-  <h3>No reservations found.</h3>
-  <p>Be the first to book a room!</p>
-</div>
-
-<div class="card-grid">
-  <div class="card glass-panel" *ngFor="let r of reservations" [ngStyle]="{'borderColor': r.type === 'BUFFER' ? 'var(--info-color)' : 'var(--glass-border)'}">
-    <div class="flex justify-between items-center" style="margin-bottom: 1rem;">
-      <span class="badge" [ngClass]="r.type === 'BUFFER' ? 'badge-warning' : 'badge-primary'">
-        {{ r.type }}
-      </span>
-      <span style="font-size: 0.85rem; color: var(--text-secondary);">
-        ID #{{ r.id }}
-      </span>
+<div class="calendar-scroll-container">
+  <div class="calendar-wrapper">
+    <!-- Time Labels Column -->
+    <div class="time-column">
+       <div class="time-header-space"></div>
+       <div class="time-labels-container">
+          <div class="time-label" *ngFor="let t of timeLabels" [style.height.px]="60 * PIXELS_PER_MINUTE">
+             <span style="position: relative; top: -10px;">{{ t }}</span>
+          </div>
+       </div>
     </div>
-
-    <h3 style="margin-bottom: 0.5rem; color: var(--primary-color);">{{ r.activity }}</h3>
-    <p style="margin-bottom: 0.25rem;"><strong>By:</strong> {{ r.user?.name || 'TSP System' }}</p>
     
-    <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px; margin: 1rem 0;">
-      <div class="flex justify-between" style="font-size: 0.9rem; margin-bottom: 0.5rem;">
-        <span style="color: var(--text-secondary)">Start:</span>
-        <span>{{ r.startTime | date:'medium' }}</span>
-      </div>
-      <div class="flex justify-between" style="font-size: 0.9rem;">
-        <span style="color: var(--text-secondary)">End:</span>
-        <span>{{ r.endTime | date:'medium' }}</span>
-      </div>
+    <!-- Weeks -->
+    <div class="week-group" *ngFor="let w of weeks">
+       <div class="week-header">{{ w.name }}</div>
+       <div class="days-row">
+          <div class="day-column" *ngFor="let d of w.days">
+             <div class="day-header">
+                <div>{{ d.name }}</div>
+                <div class="day-date">{{ d.date | date:'mediumDate' }}</div>
+             </div>
+             
+             <div class="day-grid-container">
+                <!-- Background grid lines -->
+                <div class="grid-line" *ngFor="let t of timeLabels" [style.height.px]="60 * PIXELS_PER_MINUTE"></div>
+                
+                <!-- Reservations -->
+                <div *ngFor="let r of d.reservations" 
+                     class="reservation-card"
+                     [ngClass]="r.type === 'BUFFER' ? 'res-buffer' : 'res-normal'"
+                     [style.top.px]="getTopPos(r)"
+                     [style.height.px]="getHeight(r)">
+                     
+                   <div *ngIf="r.type === 'BUFFER'; else normalContent" class="buffer-content">
+                      TSP Buffer
+                   </div>
+                   <ng-template #normalContent>
+                      <div class="res-title" [title]="r.activity">{{ r.activity }}</div>
+                      <div class="res-body">{{ r.startTime | date:'shortTime' }} - {{ r.endTime | date:'shortTime' }}</div>
+                      <div class="res-body">User: {{ r.user?.name || 'TSP System' }}</div>
+                      <div class="res-body" *ngIf="getHeight(r) > 50">HW: {{ r.hardware }}</div>
+                      <div class="res-actions" *ngIf="canModify(r)">
+                         <button (click)="editReservation(r.id)" title="Edit">✎</button>
+                         <button (click)="deleteReservation(r.id, $event)" title="Cancel">✖</button>
+                      </div>
+                   </ng-template>
+                </div>
+             </div>
+          </div>
+       </div>
     </div>
 
-    <div *ngIf="r.type !== 'BUFFER'" style="font-size: 0.9rem; margin-bottom: 1rem;">
-      <p style="margin-bottom: 0.25rem;"><strong>HW:</strong> {{ r.hardware }}</p>
-      <p><strong>SW:</strong> {{ r.software }}</p>
-    </div>
-
-    <div class="flex gap-1" *ngIf="canModify(r)" style="margin-top: 1.5rem;">
-      <button class="btn btn-secondary" style="flex:1" (click)="editReservation(r.id)">Edit</button>
-      <button class="btn btn-danger" style="flex:1" (click)="deleteReservation(r.id)">Cancel</button>
-    </div>
   </div>
 </div>
