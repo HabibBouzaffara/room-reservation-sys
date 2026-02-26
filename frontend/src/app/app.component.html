@@ -6,6 +6,7 @@
     <ng-container *ngIf="authService.isAuthenticated(); else unauthLinks">
       <a routerLink="/reservations">Reservations</a>
       <a routerLink="/reservations/new">Book Room</a>
+      <a *ngIf="authService.getRole() === 'ADMIN'" routerLink="/admin">Admin Dashboard</a>
       <a *ngIf="authService.getRole() === 'ADMIN'" routerLink="/history">History</a>
       <a href="javascript:void(0)" (click)="logout()">Logout</a>
     </ng-container>

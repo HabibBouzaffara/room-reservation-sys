@@ -16,8 +16,12 @@
     </div>
     
     <!-- Weeks -->
-    <div class="week-group" *ngFor="let w of weeks">
-       <div class="week-header">{{ w.name }}</div>
+    <div class="week-group" *ngFor="let w of weeks; let i = index">
+       <div class="week-header">
+          <span style="font-size: 0.8rem; margin-right: 4px;">CW</span>
+          <input *ngIf="isAdmin" type="number" [ngModel]="w.cw" (ngModelChange)="updateWeek($event, i)" style="width: 45px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: white; text-align: center; border-radius: 4px;" />
+          <span *ngIf="!isAdmin">{{ w.name }}</span>
+       </div>
        <div class="days-row">
           <div class="day-column" *ngFor="let d of w.days">
              <div class="day-header">
@@ -56,6 +60,7 @@
                       <div class="res-body">{{ r.startTime | date:'shortTime' }} - {{ r.endTime | date:'shortTime' }}</div>
                       <div class="res-body">User: {{ r.user?.name || 'TSP System' }}</div>
                       <div class="res-body" *ngIf="getHeight(r) > 50">HW: {{ r.hardware }}</div>
+                      <div class="res-body" *ngIf="getHeight(r) > 65">SW: {{ r.software }}</div>
                       <div class="res-actions" *ngIf="canModify(r)">
                          <button (click)="editReservation(r.id)" title="Edit">✎</button>
                          <button (click)="deleteReservation(r.id, $event)" title="Cancel">✖</button>

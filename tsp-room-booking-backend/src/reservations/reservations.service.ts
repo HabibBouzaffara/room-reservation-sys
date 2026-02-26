@@ -8,10 +8,32 @@ import { CreateReservationDto } from './dto/create-reservation.dto';
 export class ReservationsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private validateWorkingHours(start: Date, end: Date) {
+    const startDay = start.getDay();
+    const endDay = end.getDay();
+    if (startDay === 0 || startDay === 6 || endDay === 0 || endDay === 6) {
+      throw new BadRequestException('Reservations are only allowed on working days (Mon-Fri)');
+    }
+
+    const startHour = start.getHours();
+    const endHour = end.getHours();
+    const endMins = end.getMinutes();
+
+    if (startHour < 8 || startHour > 18 || (startHour === 18 && start.getMinutes() > 0)) {
+      throw new BadRequestException('Reservations are only allowed between 8 AM and 6 PM');
+    }
+    if (endHour < 8 || endHour > 18 || (endHour === 18 && endMins > 0)) {
+       throw new BadRequestException('Reservations are only allowed between 8 AM and 6 PM');
+    }
+    // Also if it spans across the boundary, though max duration per UI usually isn't that large.
+  }
+
   // Create a new reservation with 10-min buffer and history
   async create(dto: CreateReservationDto, userId: number) {
     const start = new Date(dto.startTime);
     const end = new Date(dto.endTime);
+
+    this.validateWorkingHours(start, end);
 
     // Minimum duration: 30 min
     const duration = (end.getTime() - start.getTime()) / 60000;
@@ -132,6 +154,8 @@ export class ReservationsService {
 
     const newStart = dto.startTime ? new Date(dto.startTime) : res.startTime;
     const newEnd = dto.endTime ? new Date(dto.endTime) : res.endTime;
+
+    this.validateWorkingHours(newStart, newEnd);
 
     if (dto.startTime || dto.endTime) {
       const duration = (newEnd.getTime() - newStart.getTime()) / 60000;

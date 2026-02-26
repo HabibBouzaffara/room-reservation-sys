@@ -8,11 +8,8 @@
 .calendar-wrapper {
   display: flex;
   min-width: max-content;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
   border-radius: 12px;
-  padding: 1rem;
+  overflow: hidden; /* Added to contain children */
 }
 
 .time-column {
@@ -20,6 +17,12 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  position: sticky;
+  left: 0;
+  z-index: 100;
+  background: rgba(15, 23, 42, 0.95); /* darker for better contrast when sticky */
+  backdrop-filter: blur(10px);
+  border-right: 1px solid var(--glass-border);
 }
 
 .time-header-space {
@@ -33,7 +36,6 @@
 .time-label {
   color: var(--text-secondary);
   font-size: 0.8rem;
-  border-right: 1px solid var(--glass-border);
   text-align: right;
   padding-right: 0.5rem;
   box-sizing: border-box;
@@ -49,12 +51,21 @@
 .week-header {
   text-align: center;
   font-weight: bold;
-  padding: 0.5rem;
+  padding: 0.25rem 0.5rem;
   background: rgba(255, 255, 255, 0.05);
   border-bottom: 1px solid var(--glass-border);
   border-right: 1px solid var(--glass-border);
   font-size: 0.9rem;
   height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.week-header input {
+  height: 24px;
+  margin: 0;
+  font-size: 0.8rem;
 }
 
 .days-row {

@@ -11,9 +11,11 @@ model User {
   id           Int           @id @default(autoincrement())
   name         String
   email        String        @unique
-  role         Role
+  role         Role          @default(USER)
   password     String
+  isApproved   Boolean       @default(false)
   reservations Reservation[]
+
 }
 
 model Reservation {
@@ -34,6 +36,7 @@ model History {
   action        String
   reservationId Int
   performedBy   Int
+
   timestamp     DateTime @default(now())
   oldValue      Json?
   newValue      Json?

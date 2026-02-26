@@ -5,6 +5,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { ReservationListComponent } from './components/reservation-list/reservation-list.component';
 import { ReservationFormComponent } from './components/reservation-form/reservation-form.component';
 import { HistoryComponent } from './components/history/history.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
@@ -28,6 +29,11 @@ const routes: Routes = [
   {
     path: 'history',
     component: HistoryComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin',
+    component: AdminDashboardComponent,
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

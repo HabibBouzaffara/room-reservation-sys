@@ -31,18 +31,18 @@
 
     <div>
       <label>Hardware needed *</label>
-      <input type="text" list="hardwares" [(ngModel)]="hardware" name="hardware" placeholder="E.g. D5, D4" required />
-      <datalist id="hardwares">
-        <option *ngFor="let hw of hardwareList" [value]="hw.name"></option>
-      </datalist>
+      <select [(ngModel)]="hardware" name="hardware" required style="width: 100%; padding: 0.75rem 1rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
+        <option value="" disabled selected>Select hardware</option>
+        <option *ngFor="let hw of hardwareList" [value]="hw.name">{{ hw.name }}</option>
+      </select>
     </div>
 
     <div>
       <label>Software needed *</label>
-      <input type="text" list="softwares" [(ngModel)]="software" name="software" placeholder="E.g. 102.10.20, XNF" required />
-      <datalist id="softwares">
-        <option *ngFor="let sw of softwareList" [value]="sw.name"></option>
-      </datalist>
+      <select [(ngModel)]="software" name="software" required style="width: 100%; padding: 0.75rem 1rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
+        <option value="" disabled selected>Select software</option>
+        <option *ngFor="let sw of softwareList" [value]="sw.name">{{ sw.name }}</option>
+      </select>
     </div>
 
     <div class="flex gap-2" style="margin-top: 2rem;">

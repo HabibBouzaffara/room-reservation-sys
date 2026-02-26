@@ -5,9 +5,19 @@ import { PrismaService } from '../prisma/prisma.service';
 export class HistoryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll() {
+    async findAll() {
     return this.prisma.history.findMany({
       orderBy: { timestamp: 'desc' },
+      select: {
+        id: true,
+        action: true,
+        reservationId: true,
+        performedBy: true,
+        timestamp: true,
+        oldValue: true,
+        newValue: true,
+      },
     });
   }
+
 }

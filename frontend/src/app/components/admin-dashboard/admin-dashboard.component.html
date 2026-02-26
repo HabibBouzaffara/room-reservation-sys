@@ -1,1 +1,65 @@
-<p>admin-dashboard works!</p>
+<div class="admin-dashboard-container glass-panel">
+  <h1 class="page-title">Admin Dashboard</h1>
+
+  <section class="admin-section">
+    <h3>User Management (Approve Accounts)</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <span [class.status-approved]="user.isApproved" [class.status-pending]="!user.isApproved">
+                {{ user.isApproved ? 'Approved' : 'Pending' }}
+              </span>
+            </td>
+            <td>
+              <button *ngIf="!user.isApproved" class="btn btn-small" (click)="approveUser(user.id)">Approve</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="flex gap-4">
+    <section class="admin-section half-width">
+      <h3>Hardware List</h3>
+      <div class="config-input flex gap-2">
+        <input type="text" [(ngModel)]="newHardware" placeholder="Add Hardware (e.g. D5)" />
+        <button class="btn" (click)="addHardware()">Add</button>
+      </div>
+      <ul class="config-list">
+        <li *ngFor="let hw of hardwareList">
+          {{ hw.name }}
+          <button class="btn-delete" (click)="deleteHardware(hw.id)">×</button>
+        </li>
+      </ul>
+    </section>
+
+    <section class="admin-section half-width">
+      <h3>Software List</h3>
+      <div class="config-input flex gap-2">
+        <input type="text" [(ngModel)]="newSoftware" placeholder="Add Software (e.g. 102.10.20)" />
+        <button class="btn" (click)="addSoftware()">Add</button>
+      </div>
+      <ul class="config-list">
+        <li *ngFor="let sw of softwareList">
+          {{ sw.name }}
+          <button class="btn-delete" (click)="deleteSoftware(sw.id)">×</button>
+        </li>
+      </ul>
+    </section>
+  </div>
+</div>

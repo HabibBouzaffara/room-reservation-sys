@@ -25,6 +25,7 @@ export class AuthService {
         email: true,
         role: true,
         password: true,
+        isApproved: true,
       },
     });
 
@@ -36,6 +37,11 @@ export class AuthService {
     if (!isValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
+    if (!userWithPassword.isApproved) {
+      throw new UnauthorizedException('Your account has not been approved by an Admin yet.');
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _password, ...safeUser } = userWithPassword;
     return safeUser;
@@ -59,20 +65,25 @@ export class AuthService {
       throw new BadRequestException('Email already registered');
     }
 
+    const count = await this.prisma.user.count();
+    const isFirstUser = count === 0;
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await this.prisma.user.create({
       data: {
         name,
         email,
-        role,
+        role: isFirstUser ? Role.ADMIN : role,
         password: hashedPassword,
+        isApproved: isFirstUser ? true : false,
       },
       select: {
         id: true,
         name: true,
         email: true,
         role: true,
+        isApproved: true,
       },
     });
 

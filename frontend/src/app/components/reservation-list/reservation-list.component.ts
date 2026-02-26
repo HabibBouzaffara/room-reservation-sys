@@ -20,6 +20,9 @@ export class ReservationListComponent implements OnInit {
   START_HOUR = 8; // 08:00
   END_HOUR = 18; // 18:00
 
+  weekOffset = 0;
+  baseDate = new Date();
+
   constructor(
     private reservationsService: ReservationsService,
     private authService: AuthService,
@@ -53,13 +56,12 @@ export class ReservationListComponent implements OnInit {
   }
 
   buildCalendar() {
-    // Generate 4 weeks starting from current week
     this.weeks = [];
-    const today = new Date();
-    // find monday of this week
+    const today = new Date(this.baseDate);
+    // Find Monday of the week offset from baseDate
     const dayOfWeek = today.getDay();
-    const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); 
-    const startMonday = new Date(today.setDate(diff));
+    const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) + (this.weekOffset * 7); 
+    const startMonday = new Date(today.getFullYear(), today.getMonth(), diff);
     startMonday.setHours(0,0,0,0);
 
     for (let w = 0; w < 4; w++) {
@@ -73,7 +75,6 @@ export class ReservationListComponent implements OnInit {
         const date = new Date(weekDate);
         date.setDate(date.getDate() + d);
         
-        // Filter reservations for this day
         const dayReservations = this.reservations.filter(r => {
            const rDate = new Date(r.startTime);
            return rDate.getDate() === date.getDate() && 
@@ -90,9 +91,18 @@ export class ReservationListComponent implements OnInit {
 
       this.weeks.push({
         name: `CW ${cw}`,
+        cw: cw,
         days: days
       });
     }
+  }
+
+  updateWeek(newCw: any, weekIndex: number) {
+    const val = parseInt(newCw);
+    if (isNaN(val)) return;
+    const diff = val - this.weeks[weekIndex].cw;
+    this.weekOffset += diff;
+    this.buildCalendar();
   }
 
   getWeekNumber(d: Date) {
@@ -207,6 +217,19 @@ export class ReservationListComponent implements OnInit {
     let endTime = new Date(day.date);
     endTime.setHours(endHours, eMins, 0, 0);
 
+    // Enforce 8 AM - 6 PM
+    if (startTime.getHours() < 8) {
+       startTime.setHours(8, 0, 0, 0);
+    }
+    if (endTime.getHours() > 18 || (endTime.getHours() === 18 && endTime.getMinutes() > 0)) {
+       endTime.setHours(18, 0, 0, 0);
+    }
+    
+    // Check for negative or too short duration after clamping
+    if (endTime.getTime() <= startTime.getTime()) {
+       endTime = new Date(startTime.getTime() + 60 * 60000);
+    }
+
     const reservations = day.reservations.sort((a: any, b: any) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
     
     for (let r of reservations) {
@@ -226,6 +249,7 @@ export class ReservationListComponent implements OnInit {
     if (diffMins < 60) {
        endTime = new Date(startTime.getTime() + 60 * 60000);
        
+       // Check if this 1-hour extension causes overlap
        for (let r of reservations) {
           const rStart = new Date(r.startTime);
           if (startTime < rStart && endTime > rStart) {
