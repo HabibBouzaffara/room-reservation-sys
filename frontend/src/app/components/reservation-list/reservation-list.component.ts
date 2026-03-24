@@ -16,7 +16,7 @@ export class ReservationListComponent implements OnInit {
   weeks: any[] = [];
   timeLabels: string[] = [];
 
-  PIXELS_PER_MINUTE = 2; // 120px per hour
+  PIXELS_PER_MINUTE = 1; // 60px per hour, was 120px
   START_HOUR = 8; // 08:00
   END_HOUR = 18; // 18:00
 
@@ -103,6 +103,13 @@ export class ReservationListComponent implements OnInit {
     const diff = val - this.weeks[weekIndex].cw;
     this.weekOffset += diff;
     this.buildCalendar();
+  }
+
+  isToday(date: Date): boolean {
+    const today = new Date();
+    return date.getDate() === today.getDate() &&
+           date.getMonth() === today.getMonth() &&
+           date.getFullYear() === today.getFullYear();
   }
 
   getWeekNumber(d: Date) {

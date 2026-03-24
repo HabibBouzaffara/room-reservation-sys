@@ -1,15 +1,27 @@
 .calendar-scroll-container {
   width: 100%;
   overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 1rem;
+  overflow-y: auto;
+  height: calc(100vh - 100px); /* Height from navbar area to bottom */
+  border-radius: 0;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  
+  /* Hide scrollbars specifically for this container */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.calendar-scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
 .calendar-wrapper {
   display: flex;
   min-width: max-content;
-  border-radius: 12px;
-  overflow: hidden; /* Added to contain children */
+  border-radius: 0;
+  overflow: visible; 
 }
 
 .time-column {
@@ -20,13 +32,18 @@
   position: sticky;
   left: 0;
   z-index: 100;
-  background: rgba(15, 23, 42, 0.95); /* darker for better contrast when sticky */
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
   border-right: 1px solid var(--glass-border);
 }
 
 .time-header-space {
-  height: 80px; /* Header height matching day headers + week header */
+  height: 80px; 
+  background: var(--glass-bg);
+  position: sticky;
+  top: 0;
+  z-index: 110;
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .time-labels-container {
@@ -48,19 +65,7 @@
   margin-left: -2px; /* Overlap border */
 }
 
-.week-header {
-  text-align: center;
-  font-weight: bold;
-  padding: 0.25rem 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid var(--glass-border);
-  border-right: 1px solid var(--glass-border);
-  font-size: 0.9rem;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* Moved to day-header section */
 
 .week-header input {
   height: 24px;
@@ -73,7 +78,7 @@
 }
 
 .day-column {
-  width: 180px; /* fixed width for columns */
+  width: 250px; /* Wider columns */
   flex-shrink: 0;
   border-right: 1px solid var(--glass-border);
   display: flex;
@@ -87,7 +92,27 @@
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--glass-bg);
+  position: sticky;
+  top: 35px; /* Stay below week header */
+  z-index: 105;
+}
+
+.week-header {
+  text-align: center;
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-border);
+  border-right: 1px solid var(--glass-border);
+  font-size: 0.9rem;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 106;
 }
 
 .day-date {
@@ -101,7 +126,7 @@
 }
 
 .grid-line {
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  border-bottom: 1px dashed var(--glass-border);
   box-sizing: border-box;
 }
 
@@ -126,9 +151,10 @@
 }
 
 .res-normal {
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
   border-left: 4px solid var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .res-buffer {
@@ -142,7 +168,7 @@
 .buffer-content {
   font-size: 0.7rem;
   font-weight: bold;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-color);
 }
 
 .res-title {
@@ -197,4 +223,23 @@
 
 .grid-line {
   pointer-events: none;
+}
+
+/* Today Indicator Styles */
+.day-column.is-today {
+  border-left: 2px dotted #3b82f6; /* The dotted blue line for current day */
+  background: rgba(59, 130, 246, 0.05); /* subtle highlight */
+}
+
+.today-dot {
+  width: 6px;
+  height: 6px;
+  background: #3b82f6;
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
+.day-column.is-today .day-header {
+  color: #3b82f6;
+  font-weight: bold;
 }

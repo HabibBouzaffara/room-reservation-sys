@@ -9,7 +9,6 @@ import { AuthService } from '../../services/auth.service';
 export class RegisterComponent {
   name = '';
   email = '';
-  password = '';
 
   constructor(
     private authService: AuthService,
@@ -21,7 +20,6 @@ export class RegisterComponent {
       .register({
         name: this.name,
         email: this.email,
-        password: this.password,
       })
       .subscribe({
         next: () => {

@@ -25,12 +25,12 @@
     </div>
 
     <div class="flex gap-4" style="margin-top: 1rem;" *ngIf="log.action !== 'DELETE_RESERVATION'">
-      <div style="flex: 1; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+      <div style="flex: 1; background: var(--input-bg); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 8px;">
         <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">Old Value</h4>
         <pre style="margin: 0; font-size: 0.8rem; overflow: auto; color: var(--text-secondary);">{{ log.oldValue | json }}</pre>
       </div>
 
-      <div style="flex: 1; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+      <div style="flex: 1; background: var(--input-bg); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 8px;">
         <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">New Value</h4>
         <pre style="margin: 0; font-size: 0.8rem; overflow: auto; color: var(--text-color);">{{ log.newValue | json }}</pre>
       </div>

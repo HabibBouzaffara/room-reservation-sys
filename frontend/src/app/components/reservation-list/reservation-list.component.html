@@ -1,5 +1,4 @@
-<div class="flex justify-between items-center" style="margin-bottom: 2rem;">
-  <h2>Weekly Room Overview</h2>
+<div class="flex justify-end" style="margin-bottom: 0.5rem; padding-right: 1rem; margin-top: 0.5rem;">
   <button class="btn" routerLink="/reservations/new">Book a Room</button>
 </div>
 
@@ -19,14 +18,15 @@
     <div class="week-group" *ngFor="let w of weeks; let i = index">
        <div class="week-header">
           <span style="font-size: 0.8rem; margin-right: 4px;">CW</span>
-          <input *ngIf="isAdmin" type="number" [ngModel]="w.cw" (ngModelChange)="updateWeek($event, i)" style="width: 45px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: white; text-align: center; border-radius: 4px;" />
+          <input *ngIf="isAdmin" type="number" [ngModel]="w.cw" (ngModelChange)="updateWeek($event, i)" style="width: 45px; background: var(--input-bg); border: 1px solid var(--glass-border); color: var(--text-color); text-align: center; border-radius: 4px;" />
           <span *ngIf="!isAdmin">{{ w.name }}</span>
        </div>
        <div class="days-row">
-          <div class="day-column" *ngFor="let d of w.days">
+          <div class="day-column" *ngFor="let d of w.days" [class.is-today]="isToday(d.date)">
              <div class="day-header">
                 <div>{{ d.name }}</div>
                 <div class="day-date">{{ d.date | date:'mediumDate' }}</div>
+                <div *ngIf="isToday(d.date)" class="today-dot"></div>
              </div>
              
              <div class="day-grid-container"

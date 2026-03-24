@@ -8,7 +8,6 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   email = '';
-  password = '';
 
   constructor(
     private authService: AuthService,
@@ -19,7 +18,6 @@ export class LoginComponent {
     this.authService
       .login({
         email: this.email,
-        password: this.password,
       })
       .subscribe({
         next: (res) => {
@@ -27,7 +25,7 @@ export class LoginComponent {
           this.router.navigate(['/reservations']);
         },
         error: () => {
-          alert('Invalid email or password');
+          alert('Login failed. Not approved or invalid email.');
         },
       });
   }
