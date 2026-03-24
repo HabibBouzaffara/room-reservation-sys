@@ -12,6 +12,7 @@ export class ReservationFormComponent implements OnInit {
 
   startTime = '';
   endTime = '';
+  room = 'IPB';
   
   activityType = '';
   activityDesc = '';
@@ -44,6 +45,11 @@ export class ReservationFormComponent implements OnInit {
        end.setMinutes(end.getMinutes() - end.getTimezoneOffset());
        this.endTime = end.toISOString().slice(0, 16);
     }
+    
+    const roomQ = this.route.snapshot.queryParamMap.get('room');
+    if (roomQ) {
+      this.room = roomQ;
+    }
 
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
@@ -56,8 +62,8 @@ export class ReservationFormComponent implements OnInit {
   }
 
   loadSysConfig() {
-    this.reservationsService.getHardware().subscribe(data => this.hardwareList = data || []);
-    this.reservationsService.getSoftware().subscribe(data => this.softwareList = data || []);
+    this.reservationsService.getHardware(this.room).subscribe(data => this.hardwareList = data || []);
+    this.reservationsService.getSoftware(this.room).subscribe(data => this.softwareList = data || []);
   }
 
   loadReservationData(id: number) {
@@ -73,6 +79,11 @@ export class ReservationFormComponent implements OnInit {
           const end = new Date(data.endTime);
           end.setMinutes(end.getMinutes() - end.getTimezoneOffset());
           this.endTime = end.toISOString().slice(0, 16);
+        }
+        
+        if (data.room) {
+          this.room = data.room;
+          this.loadSysConfig(); // Reload sys config based on existing reservation room
         }
 
         if (this.activities.includes(data.activity)) {
@@ -101,6 +112,7 @@ export class ReservationFormComponent implements OnInit {
       activity: finalActivity,
       hardware: this.hardware,
       software: this.software,
+      room: this.room,
     };
 
     if (this.isEditMode && this.reservationId) {

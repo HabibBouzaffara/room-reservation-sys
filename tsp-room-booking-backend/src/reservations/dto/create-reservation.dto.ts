@@ -16,4 +16,7 @@ export class CreateReservationDto {
 
   @IsNotEmpty()
   software: string;
+
+  @IsNotEmpty()
+  room: string;
 }

@@ -24,6 +24,7 @@ model Reservation {
   activity  String
   hardware  String
   software  String
+  room      String   @default("IPB")
   type      ReservationType
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
@@ -53,10 +54,16 @@ enum ReservationType {
 
 model Hardware {
   id   Int    @id @default(autoincrement())
-  name String @unique
+  name String
+  room String @default("IPB")
+
+  @@unique([name, room])
 }
 
 model Software {
   id   Int    @id @default(autoincrement())
-  name String @unique
+  name String
+  room String @default("IPB")
+
+  @@unique([name, room])
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { SysconfigService } from './sysconfig.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -11,15 +11,15 @@ export class SysconfigController {
 
   @UseGuards(JwtAuthGuard)
   @Get('hardware')
-  getHardware() {
-    return this.sysconfigService.getHardware();
+  getHardware(@Query('room') room?: string) {
+    return this.sysconfigService.getHardware(room);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Post('hardware')
-  addHardware(@Body('name') name: string) {
-    return this.sysconfigService.addHardware(name);
+  addHardware(@Body('name') name: string, @Body('room') room?: string) {
+    return this.sysconfigService.addHardware(name, room);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -31,15 +31,15 @@ export class SysconfigController {
 
   @UseGuards(JwtAuthGuard)
   @Get('software')
-  getSoftware() {
-    return this.sysconfigService.getSoftware();
+  getSoftware(@Query('room') room?: string) {
+    return this.sysconfigService.getSoftware(room);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Post('software')
-  addSoftware(@Body('name') name: string) {
-    return this.sysconfigService.addSoftware(name);
+  addSoftware(@Body('name') name: string, @Body('room') room?: string) {
+    return this.sysconfigService.addSoftware(name, room);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

@@ -1,5 +1,13 @@
-<div class="flex justify-end" style="margin-bottom: 0.5rem; padding-right: 1rem; margin-top: 0.5rem;">
-  <button class="btn" routerLink="/reservations/new">Book a Room</button>
+<div class="flex justify-between items-center" style="margin-bottom: 0.5rem; padding-right: 1rem; padding-left: 1rem; margin-top: 0.5rem;">
+  <div class="room-selector flex gap-1">
+    <button *ngFor="let rm of rooms" 
+            class="btn" 
+            [ngClass]="selectedRoom === rm ? '' : 'btn-secondary'"
+            (click)="setRoom(rm)">
+      Room {{ rm }}
+    </button>
+  </div>
+  <button class="btn" routerLink="/reservations/new" [queryParams]="{ room: selectedRoom }">Book a Room</button>
 </div>
 
 <div class="calendar-scroll-container">

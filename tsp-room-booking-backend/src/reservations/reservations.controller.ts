@@ -7,6 +7,7 @@ import {
   Get,
   Delete,
   Param,
+  Query,
 } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -41,8 +42,8 @@ export class ReservationsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.reservationsService.findAll();
+  findAll(@Query('room') room?: string) {
+    return this.reservationsService.findAll(room);
   }
 
   @UseGuards(JwtAuthGuard)

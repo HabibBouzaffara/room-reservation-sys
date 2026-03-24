@@ -4,6 +4,10 @@
   </h2>
 
   <form (ngSubmit)="saveReservation()">
+    <div style="margin-bottom: 1.5rem;">
+      <label>Room</label>
+      <input type="text" [value]="room" readonly class="is-readonly" style="background: var(--input-bg); opacity: 0.7;" />
+    </div>
     <div class="flex flex-col gap-2" style="margin-bottom: 1.5rem;">
       <div style="flex:1">
         <label>Start Time *</label>
@@ -18,7 +22,7 @@
 
     <div>
       <label>Activity *</label>
-      <select [(ngModel)]="activityType" name="activityType" required style="margin-bottom: 1rem; width: 100%; padding: 0.75rem 1rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
+      <select [(ngModel)]="activityType" name="activityType" required style="margin-bottom: 1rem; width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
         <option value="" disabled selected>Select an activity</option>
         <option *ngFor="let act of activities" [value]="act">{{ act }}</option>
       </select>
@@ -31,7 +35,7 @@
 
     <div>
       <label>Hardware needed *</label>
-      <select [(ngModel)]="hardware" name="hardware" required style="width: 100%; padding: 0.75rem 1rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
+      <select [(ngModel)]="hardware" name="hardware" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
         <option value="" disabled selected>Select hardware</option>
         <option *ngFor="let hw of hardwareList" [value]="hw.name">{{ hw.name }}</option>
       </select>
@@ -39,7 +43,7 @@
 
     <div>
       <label>Software needed *</label>
-      <select [(ngModel)]="software" name="software" required style="width: 100%; padding: 0.75rem 1rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
+      <select [(ngModel)]="software" name="software" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
         <option value="" disabled selected>Select software</option>
         <option *ngFor="let sw of softwareList" [value]="sw.name">{{ sw.name }}</option>
       </select>

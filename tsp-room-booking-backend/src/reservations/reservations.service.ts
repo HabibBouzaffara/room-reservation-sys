@@ -41,10 +41,11 @@ export class ReservationsService {
       throw new BadRequestException('Minimum reservation is 30 minutes');
     }
 
-    // Check for overlapping NORMAL or BUFFER reservations
+    // Check for overlapping NORMAL or BUFFER reservations in the same room
     const overlap = await this.prisma.reservation.findFirst({
       where: {
         AND: [
+          { room: dto.room },
           {
             startTime: { lt: end },
             endTime: { gt: start },
@@ -65,6 +66,7 @@ export class ReservationsService {
         activity: dto.activity,
         hardware: dto.hardware,
         software: dto.software,
+        room: dto.room,
         type: 'NORMAL',
 
         userId,
@@ -79,6 +81,7 @@ export class ReservationsService {
         activity: 'TSP buffer',
         hardware: '-',
         software: '-',
+        room: dto.room,
         type: 'BUFFER',
 
         userId, // can be changed to admin user later
@@ -102,9 +105,11 @@ export class ReservationsService {
     return reservation;
   }
 
-  // Return all reservations with user info
-  async findAll() {
+  // Return all reservations with user info, optionally filtered by room
+  async findAll(room?: string) {
+    const where = room ? { room } : {};
     return this.prisma.reservation.findMany({
+      where,
       orderBy: { startTime: 'asc' },
       include: {
         user: {
@@ -148,6 +153,7 @@ export class ReservationsService {
     const buffer = await this.prisma.reservation.findFirst({
       where: {
         startTime: res.endTime,
+        room: res.room,
         type: 'BUFFER',
       },
     });
@@ -168,6 +174,7 @@ export class ReservationsService {
 
       const overlap = await this.prisma.reservation.findFirst({
         where: {
+          room: res.room,
           id: { notIn: excludeIds },
           startTime: { lt: newEnd },
           endTime: { gt: newStart },
@@ -187,6 +194,7 @@ export class ReservationsService {
         activity: dto.activity ?? res.activity,
         hardware: dto.hardware ?? res.hardware,
         software: dto.software ?? res.software,
+        room: dto.room ?? res.room,
       },
     });
 

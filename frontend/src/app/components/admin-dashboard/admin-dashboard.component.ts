@@ -13,11 +13,23 @@ export class AdminDashboardComponent implements OnInit {
   
   newHardware: string = '';
   newSoftware: string = '';
+  
+  rooms: string[] = ['IPB', 'BCP', 'BDC'];
+  selectedRoom: string = 'IPB';
 
   constructor(private reservationsService: ReservationsService) {}
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loadSysconfigData();
+  }
+
+  setRoom(room: string) {
+    this.selectedRoom = room;
+    this.loadSysconfigData();
+  }
+
+  loadSysconfigData() {
     this.loadHardware();
     this.loadSoftware();
   }
@@ -33,12 +45,12 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   loadHardware() {
-    this.reservationsService.getHardware().subscribe(data => this.hardwareList = data);
+    this.reservationsService.getHardware(this.selectedRoom).subscribe(data => this.hardwareList = data);
   }
 
   addHardware() {
     if (!this.newHardware) return;
-    this.reservationsService.addHardware(this.newHardware).subscribe(() => {
+    this.reservationsService.addHardware(this.newHardware, this.selectedRoom).subscribe(() => {
       this.newHardware = '';
       this.loadHardware();
     });
@@ -49,12 +61,12 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   loadSoftware() {
-    this.reservationsService.getSoftware().subscribe(data => this.softwareList = data);
+    this.reservationsService.getSoftware(this.selectedRoom).subscribe(data => this.softwareList = data);
   }
 
   addSoftware() {
     if (!this.newSoftware) return;
-    this.reservationsService.addSoftware(this.newSoftware).subscribe(() => {
+    this.reservationsService.addSoftware(this.newSoftware, this.selectedRoom).subscribe(() => {
       this.newSoftware = '';
       this.loadSoftware();
     });

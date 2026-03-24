@@ -33,6 +33,17 @@
     </div>
   </section>
 
+  <div class="flex gap-4" style="margin-bottom: 2rem;">
+    <div class="room-selector flex gap-1">
+      <button *ngFor="let rm of rooms" 
+              class="btn" 
+              [ngClass]="selectedRoom === rm ? '' : 'btn-secondary'"
+              (click)="setRoom(rm)">
+        Configure {{ rm }}
+      </button>
+    </div>
+  </div>
+
   <div class="flex gap-4">
     <section class="admin-section half-width">
       <h3>Hardware List</h3>

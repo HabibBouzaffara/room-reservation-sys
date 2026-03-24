@@ -14,8 +14,8 @@ export class ReservationsService {
     return this.http.post(this.apiUrl, data);
   }
 
-  getReservations(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  getReservations(room: string = 'IPB'): Observable<any> {
+    return this.http.get(`${this.apiUrl}?room=${room}`);
   }
 
   getReservation(id: number): Observable<any> {
@@ -34,25 +34,25 @@ export class ReservationsService {
     return this.http.get('http://localhost:3000/history');
   }
 
-  getHardware(): Observable<any> {
-    return this.http.get('http://localhost:3000/sysconfig/hardware');
+  getHardware(room: string = 'IPB'): Observable<any> {
+    return this.http.get(`http://localhost:3000/sysconfig/hardware?room=${room}`);
   }
 
-  getSoftware(): Observable<any> {
-    return this.http.get('http://localhost:3000/sysconfig/software');
+  getSoftware(room: string = 'IPB'): Observable<any> {
+    return this.http.get(`http://localhost:3000/sysconfig/software?room=${room}`);
   }
 
   // --- Sysconfig Management (Admin) ---
-  addHardware(name: string): Observable<any> {
-    return this.http.post('http://localhost:3000/sysconfig/hardware', { name });
+  addHardware(name: string, room: string = 'IPB'): Observable<any> {
+    return this.http.post('http://localhost:3000/sysconfig/hardware', { name, room });
   }
 
   deleteHardware(id: number): Observable<any> {
     return this.http.delete(`http://localhost:3000/sysconfig/hardware/${id}`);
   }
 
-  addSoftware(name: string): Observable<any> {
-    return this.http.post('http://localhost:3000/sysconfig/software', { name });
+  addSoftware(name: string, room: string = 'IPB'): Observable<any> {
+    return this.http.post('http://localhost:3000/sysconfig/software', { name, room });
   }
 
   deleteSoftware(id: number): Observable<any> {

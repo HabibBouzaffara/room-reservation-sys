@@ -12,6 +12,8 @@ export class ReservationListComponent implements OnInit {
   reservations: any[] = [];
   currentUserId: number | null = null;
   isAdmin: boolean = false;
+  rooms: string[] = ['IPB', 'BCP', 'BDC'];
+  selectedRoom: string = 'IPB';
 
   weeks: any[] = [];
   timeLabels: string[] = [];
@@ -43,8 +45,13 @@ export class ReservationListComponent implements OnInit {
     }
   }
 
+  setRoom(room: string) {
+    this.selectedRoom = room;
+    this.loadReservations();
+  }
+
   loadReservations() {
-    this.reservationsService.getReservations().subscribe({
+    this.reservationsService.getReservations(this.selectedRoom).subscribe({
       next: (data) => {
         this.reservations = data;
         this.buildCalendar();
@@ -269,7 +276,8 @@ export class ReservationListComponent implements OnInit {
     this.router.navigate(['/reservations/new'], {
       queryParams: {
         start: startTime.toISOString(),
-        end: endTime.toISOString()
+        end: endTime.toISOString(),
+        room: this.selectedRoom
       }
     });
   }

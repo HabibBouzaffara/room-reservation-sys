@@ -5,26 +5,28 @@ import { PrismaService } from '../prisma/prisma.service';
 export class SysconfigService {
   constructor(private prisma: PrismaService) {}
 
-  async getHardware() {
-    return this.prisma.hardware.findMany({ orderBy: { name: 'asc' } });
+  async getHardware(room?: string) {
+    const where = room ? { room } : {};
+    return this.prisma.hardware.findMany({ where, orderBy: { name: 'asc' } });
   }
 
-  async addHardware(name: string) {
+  async addHardware(name: string, room: string = 'IPB') {
     if (!name) throw new BadRequestException('Name is required');
-    return this.prisma.hardware.create({ data: { name } });
+    return this.prisma.hardware.create({ data: { name, room } });
   }
 
   async deleteHardware(id: number) {
     return this.prisma.hardware.delete({ where: { id } });
   }
 
-  async getSoftware() {
-    return this.prisma.software.findMany({ orderBy: { name: 'asc' } });
+  async getSoftware(room?: string) {
+    const where = room ? { room } : {};
+    return this.prisma.software.findMany({ where, orderBy: { name: 'asc' } });
   }
 
-  async addSoftware(name: string) {
+  async addSoftware(name: string, room: string = 'IPB') {
     if (!name) throw new BadRequestException('Name is required');
-    return this.prisma.software.create({ data: { name } });
+    return this.prisma.software.create({ data: { name, room } });
   }
 
   async deleteSoftware(id: number) {
