@@ -26,7 +26,7 @@
     <div class="week-group" *ngFor="let w of weeks; let i = index">
        <div class="week-header">
           <span style="font-size: 0.8rem; margin-right: 4px;">CW</span>
-          <input *ngIf="isAdmin" type="number" [ngModel]="w.cw" (ngModelChange)="updateWeek($event, i)" style="width: 45px; background: var(--input-bg); border: 1px solid var(--glass-border); color: var(--text-color); text-align: center; border-radius: 4px;" />
+          <input *ngIf="isAdmin" type="number" [value]="w.cw" (change)="updateWeek($any($event.target).value, i)" style="width: 70px; background: var(--input-bg); border: 1px solid var(--glass-border); color: var(--text-color); text-align: center; border-radius: 4px;" />
           <span *ngIf="!isAdmin">{{ w.name }}</span>
        </div>
        <div class="days-row">
@@ -56,7 +56,7 @@
                 <!-- Reservations -->
                 <div *ngFor="let r of d.reservations" 
                      class="reservation-card"
-                     [ngClass]="r.type === 'BUFFER' ? 'res-buffer' : 'res-normal'"
+                     [ngClass]="r.type === 'BUFFER' ? 'res-buffer' : (r.isHardwareOnly ? 'res-hw-only' : 'res-normal')"
                      [style.top.px]="getTopPos(r)"
                      [style.height.px]="getHeight(r)">
                      
@@ -64,7 +64,10 @@
                       TSP Buffer
                    </div>
                    <ng-template #normalContent>
-                      <div class="res-title" [title]="r.activity">{{ r.activity }}</div>
+                      <div class="res-title" [title]="r.activity">
+                         <span *ngIf="r.isHardwareOnly" style="color: var(--warning-color, #fbbf24)">[HW] </span>
+                         {{ r.activity }}
+                      </div>
                       <div class="res-body">{{ r.startTime | date:'shortTime' }} - {{ r.endTime | date:'shortTime' }}</div>
                       <div class="res-body">User: {{ r.user?.name || 'TSP System' }}</div>
                       <div class="res-body" *ngIf="getHeight(r) > 50">HW: {{ r.hardware }}</div>

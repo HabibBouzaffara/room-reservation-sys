@@ -12,6 +12,7 @@
   /* Hide scrollbars specifically for this container */
   scrollbar-width: none;
   -ms-overflow-style: none;
+  overscroll-behavior-x: none;
 }
 .calendar-scroll-container::-webkit-scrollbar {
   display: none;
@@ -157,6 +158,13 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.res-hw-only {
+  background: var(--card-bg);
+  border: 1px dashed var(--warning-color, #fbbf24);
+  border-left: 4px solid var(--warning-color, #fbbf24);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 .res-buffer {
   background: rgba(59, 130, 246, 0.4);
   backdrop-filter: blur(4px);
@@ -196,10 +204,10 @@
 }
 
 .res-actions button {
-  background: rgba(255,255,255,0.1);
-  border: none;
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
   border-radius: 4px;
-  color: white;
+  color: var(--text-color);
   padding: 2px 6px;
   cursor: pointer;
   font-size: 0.7rem;

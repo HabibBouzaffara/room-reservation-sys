@@ -19,4 +19,6 @@ export class CreateReservationDto {
 
   @IsNotEmpty()
   room: string;
+
+  isHardwareOnly?: boolean;
 }

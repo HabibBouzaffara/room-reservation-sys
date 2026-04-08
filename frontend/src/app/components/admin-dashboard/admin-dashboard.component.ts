@@ -12,6 +12,7 @@ export class AdminDashboardComponent implements OnInit {
   softwareList: any[] = [];
   
   newHardware: string = '';
+  newHardwareQty: number = 1;
   newSoftware: string = '';
   
   rooms: string[] = ['IPB', 'BCP', 'BDC'];
@@ -50,8 +51,9 @@ export class AdminDashboardComponent implements OnInit {
 
   addHardware() {
     if (!this.newHardware) return;
-    this.reservationsService.addHardware(this.newHardware, this.selectedRoom).subscribe(() => {
+    this.reservationsService.addHardware(this.newHardware, this.selectedRoom, this.newHardwareQty).subscribe(() => {
       this.newHardware = '';
+      this.newHardwareQty = 1;
       this.loadHardware();
     });
   }

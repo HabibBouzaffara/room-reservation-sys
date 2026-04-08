@@ -244,7 +244,10 @@ export class ReservationListComponent implements OnInit {
        endTime = new Date(startTime.getTime() + 60 * 60000);
     }
 
-    const reservations = day.reservations.sort((a: any, b: any) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+    // Filter out hardware-only reservations so they don't block room booking interactions
+    const reservations = day.reservations
+      .filter((r: any) => !r.isHardwareOnly)
+      .sort((a: any, b: any) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
     
     for (let r of reservations) {
       const rStart = new Date(r.startTime);

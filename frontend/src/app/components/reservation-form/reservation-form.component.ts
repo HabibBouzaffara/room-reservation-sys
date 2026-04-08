@@ -13,6 +13,7 @@ export class ReservationFormComponent implements OnInit {
   startTime = '';
   endTime = '';
   room = 'IPB';
+  isHardwareOnly = false;
   
   activityType = '';
   activityDesc = '';
@@ -62,7 +63,14 @@ export class ReservationFormComponent implements OnInit {
   }
 
   loadSysConfig() {
-    this.reservationsService.getHardware(this.room).subscribe(data => this.hardwareList = data || []);
+    let startIso: string | undefined;
+    let endIso: string | undefined;
+    if (this.startTime && this.endTime) {
+      startIso = new Date(this.startTime).toISOString();
+      endIso = new Date(this.endTime).toISOString();
+    }
+    
+    this.reservationsService.getHardware(this.room, startIso, endIso).subscribe(data => this.hardwareList = data || []);
     this.reservationsService.getSoftware(this.room).subscribe(data => this.softwareList = data || []);
   }
 
@@ -95,6 +103,7 @@ export class ReservationFormComponent implements OnInit {
 
         this.hardware = data.hardware;
         this.software = data.software;
+        this.isHardwareOnly = data.isHardwareOnly || false;
       },
       error: () => {
         alert('Failed to load reservation details');
@@ -113,6 +122,7 @@ export class ReservationFormComponent implements OnInit {
       hardware: this.hardware,
       software: this.software,
       room: this.room,
+      isHardwareOnly: this.isHardwareOnly,
     };
 
     if (this.isEditMode && this.reservationId) {

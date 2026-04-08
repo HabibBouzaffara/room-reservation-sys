@@ -23,9 +23,10 @@ model Reservation {
   endTime   DateTime
   activity  String
   hardware  String
-  software  String
-  room      String   @default("IPB")
-  type      ReservationType
+  software       String
+  room           String   @default("IPB")
+  isHardwareOnly Boolean  @default(false)
+  type           ReservationType
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
@@ -53,9 +54,10 @@ enum ReservationType {
 }
 
 model Hardware {
-  id   Int    @id @default(autoincrement())
-  name String
-  room String @default("IPB")
+  id       Int    @id @default(autoincrement())
+  name     String
+  quantity Int    @default(1)
+  room     String @default("IPB")
 
   @@unique([name, room])
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -34,8 +34,12 @@ export class ReservationsService {
     return this.http.get('http://localhost:3000/history');
   }
 
-  getHardware(room: string = 'IPB'): Observable<any> {
-    return this.http.get(`http://localhost:3000/sysconfig/hardware?room=${room}`);
+  getHardware(room?: string, start?: string, end?: string): Observable<any[]> {
+    let params = new HttpParams();
+    if (room) params = params.set('room', room);
+    if (start) params = params.set('start', start);
+    if (end) params = params.set('end', end);
+    return this.http.get<any[]>('http://localhost:3000/sysconfig/hardware', { params });
   }
 
   getSoftware(room: string = 'IPB'): Observable<any> {
@@ -43,8 +47,8 @@ export class ReservationsService {
   }
 
   // --- Sysconfig Management (Admin) ---
-  addHardware(name: string, room: string = 'IPB'): Observable<any> {
-    return this.http.post('http://localhost:3000/sysconfig/hardware', { name, room });
+  addHardware(name: string, room: string = 'IPB', quantity: number = 1): Observable<any> {
+    return this.http.post('http://localhost:3000/sysconfig/hardware', { name, room, quantity });
   }
 
   deleteHardware(id: number): Observable<any> {

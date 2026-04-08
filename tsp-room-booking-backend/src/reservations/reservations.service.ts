@@ -42,20 +42,42 @@ export class ReservationsService {
     }
 
     // Check for overlapping NORMAL or BUFFER reservations in the same room
-    const overlap = await this.prisma.reservation.findFirst({
-      where: {
-        AND: [
-          { room: dto.room },
-          {
-            startTime: { lt: end },
-            endTime: { gt: start },
-          },
-        ],
-      },
-    });
+    if (!dto.isHardwareOnly) {
+      const overlap = await this.prisma.reservation.findFirst({
+        where: {
+          AND: [
+            { room: dto.room },
+            { isHardwareOnly: false },
+            {
+              startTime: { lt: end },
+              endTime: { gt: start },
+            },
+          ],
+        },
+      });
 
-    if (overlap) {
-      throw new BadRequestException('Time slot already reserved');
+      if (overlap) {
+        throw new BadRequestException(`Room ${dto.room} is already reserved for this time slot`);
+      }
+    }
+
+    if (dto.hardware && dto.hardware !== '-' && dto.hardware !== '') {
+      const hwObj = await this.prisma.hardware.findFirst({
+        where: { name: dto.hardware, room: dto.room }
+      });
+      if (hwObj) {
+        const overlappingHwCount = await this.prisma.reservation.count({
+          where: {
+            hardware: dto.hardware,
+            room: dto.room,
+            startTime: { lt: end },
+            endTime: { gt: start }
+          }
+        });
+        if (overlappingHwCount >= hwObj.quantity) {
+          throw new BadRequestException(`Hardware ${dto.hardware} is out of stock for this time slot`);
+        }
+      }
     }
 
     // Create main reservation
@@ -67,26 +89,30 @@ export class ReservationsService {
         hardware: dto.hardware,
         software: dto.software,
         room: dto.room,
+        isHardwareOnly: dto.isHardwareOnly || false,
         type: 'NORMAL',
 
         userId,
       },
     });
 
-    // Create 10-min buffer after reservation
-    const bufferReservation = await this.prisma.reservation.create({
-      data: {
-        startTime: end,
-        endTime: new Date(end.getTime() + 10 * 60000),
-        activity: 'TSP buffer',
-        hardware: '-',
-        software: '-',
-        room: dto.room,
-        type: 'BUFFER',
-
-        userId, // can be changed to admin user later
-      },
-    });
+    let bufferReservation: any = null;
+    if (!dto.isHardwareOnly) {
+      // Create 10-min buffer after reservation
+      bufferReservation = await this.prisma.reservation.create({
+        data: {
+          startTime: end,
+          endTime: new Date(end.getTime() + 10 * 60000),
+          activity: 'TSP buffer',
+          hardware: '-',
+          software: '-',
+          room: dto.room,
+          isHardwareOnly: false,
+          type: 'BUFFER',
+          userId,
+        },
+      });
+    }
 
     // Insert into History
     await this.prisma.history.create({
@@ -172,17 +198,45 @@ export class ReservationsService {
       const excludeIds = [res.id];
       if (buffer) excludeIds.push(buffer.id);
 
-      const overlap = await this.prisma.reservation.findFirst({
-        where: {
-          room: res.room,
-          id: { notIn: excludeIds },
-          startTime: { lt: newEnd },
-          endTime: { gt: newStart },
-        },
-      });
+      if (!res.isHardwareOnly) {
+        const overlap = await this.prisma.reservation.findFirst({
+          where: {
+            room: res.room,
+            isHardwareOnly: false,
+            id: { notIn: excludeIds },
+            startTime: { lt: newEnd },
+            endTime: { gt: newStart },
+          },
+        });
 
-      if (overlap) {
-        throw new BadRequestException('Time slot already reserved');
+        if (overlap) {
+          throw new BadRequestException(`Room ${res.room} is already reserved for this time slot`);
+        }
+      }
+    }
+
+    const newHw = dto.hardware ?? res.hardware;
+    const newRoom = dto.room ?? res.room;
+    if (newHw && newHw !== '-' && newHw !== '') {
+      const hwObj = await this.prisma.hardware.findFirst({
+        where: { name: newHw, room: newRoom }
+      });
+      if (hwObj) {
+        const excludeIds = [res.id];
+        if (buffer) excludeIds.push(buffer.id);
+
+        const overlappingHwCount = await this.prisma.reservation.count({
+          where: {
+            hardware: newHw,
+            room: newRoom,
+            id: { notIn: excludeIds },
+            startTime: { lt: newEnd },
+            endTime: { gt: newStart }
+          }
+        });
+        if (overlappingHwCount >= hwObj.quantity) {
+          throw new BadRequestException(`Hardware ${newHw} is out of stock for this time slot`);
+        }
       }
     }
 

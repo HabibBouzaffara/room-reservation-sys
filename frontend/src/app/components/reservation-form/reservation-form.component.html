@@ -9,14 +9,14 @@
       <input type="text" [value]="room" readonly class="is-readonly" style="background: var(--input-bg); opacity: 0.7;" />
     </div>
     <div class="flex flex-col gap-2" style="margin-bottom: 1.5rem;">
-      <div style="flex:1">
+      <div class="form-group">
         <label>Start Time *</label>
-        <input type="datetime-local" [(ngModel)]="startTime" name="startTime" required />
+        <input type="datetime-local" [(ngModel)]="startTime" (change)="loadSysConfig()" name="startTime" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);" />
       </div>
 
-      <div style="flex:1">
+      <div class="form-group">
         <label>End Time *</label>
-        <input type="datetime-local" [(ngModel)]="endTime" name="endTime" required />
+        <input type="datetime-local" [(ngModel)]="endTime" (change)="loadSysConfig()" name="endTime" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);" />
       </div>
     </div>
 
@@ -35,10 +35,18 @@
 
     <div>
       <label>Hardware needed *</label>
-      <select [(ngModel)]="hardware" name="hardware" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
+      <select [(ngModel)]="hardware" name="hardware" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color); margin-bottom: 0.5rem;">
         <option value="" disabled selected>Select hardware</option>
-        <option *ngFor="let hw of hardwareList" [value]="hw.name">{{ hw.name }}</option>
+        <option *ngFor="let hw of hardwareList" [value]="hw.name" [disabled]="hw.available <= 0">
+          {{ hw.name }} (Available: {{ hw.available }} / {{ hw.quantity }})
+        </option>
       </select>
+      <div style="display: flex; align-items: center; gap: 0.5rem;" *ngIf="hardware && hardware !== '-'">
+        <input type="checkbox" id="hwOnly" [(ngModel)]="isHardwareOnly" name="isHardwareOnly" style="width: auto; height: 18px; margin: 0; cursor: pointer;" />
+        <label for="hwOnly" style="margin: 0; font-size: 0.9rem; font-weight: normal; cursor: pointer;">
+          Hardware Only (I don't need the physical room)
+        </label>
+      </div>
     </div>
 
     <div>

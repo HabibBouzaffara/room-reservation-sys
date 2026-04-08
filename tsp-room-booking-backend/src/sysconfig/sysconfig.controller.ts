@@ -11,15 +11,23 @@ export class SysconfigController {
 
   @UseGuards(JwtAuthGuard)
   @Get('hardware')
-  getHardware(@Query('room') room?: string) {
-    return this.sysconfigService.getHardware(room);
+  getHardware(
+    @Query('room') room?: string,
+    @Query('start') start?: string,
+    @Query('end') end?: string,
+  ) {
+    return this.sysconfigService.getHardware(room, start, end);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Post('hardware')
-  addHardware(@Body('name') name: string, @Body('room') room?: string) {
-    return this.sysconfigService.addHardware(name, room);
+  addHardware(
+    @Body('name') name: string,
+    @Body('room') room?: string,
+    @Body('quantity') quantity?: number,
+  ) {
+    return this.sysconfigService.addHardware(name, room, quantity);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
