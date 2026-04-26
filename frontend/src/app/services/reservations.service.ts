@@ -34,6 +34,10 @@ export class ReservationsService {
     return this.http.get('http://localhost:3000/history');
   }
 
+  getReservationHistory(reservationId: number): Observable<any> {
+    return this.http.get(`http://localhost:3000/history/reservation/${reservationId}`);
+  }
+
   getHardware(room?: string, start?: string, end?: string): Observable<any[]> {
     let params = new HttpParams();
     if (room) params = params.set('room', room);
@@ -61,6 +65,14 @@ export class ReservationsService {
 
   deleteSoftware(id: number): Observable<any> {
     return this.http.delete(`http://localhost:3000/sysconfig/software/${id}`);
+  }
+
+  getWorkingHours(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:3000/sysconfig/working-hours');
+  }
+
+  setWorkingHours(rules: any[]): Observable<any> {
+    return this.http.post('http://localhost:3000/sysconfig/working-hours', { rules });
   }
 
   // --- User Management (Admin) ---

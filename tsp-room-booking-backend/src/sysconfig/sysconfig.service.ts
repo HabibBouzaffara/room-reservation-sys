@@ -57,4 +57,25 @@ export class SysconfigService {
   async deleteSoftware(id: number) {
     return this.prisma.software.delete({ where: { id } });
   }
+
+  async getWorkingHourRules() {
+    const rulesConfig = await this.prisma.sysConfig.findUnique({ where: { key: 'WORK_HOUR_RULES' } });
+    if (rulesConfig) {
+      try {
+        return JSON.parse(rulesConfig.value);
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  }
+
+  async setWorkingHourRules(rules: any[]) {
+    await this.prisma.sysConfig.upsert({
+      where: { key: 'WORK_HOUR_RULES' },
+      update: { value: JSON.stringify(rules) },
+      create: { key: 'WORK_HOUR_RULES', value: JSON.stringify(rules) }
+    });
+    return rules;
+  }
 }

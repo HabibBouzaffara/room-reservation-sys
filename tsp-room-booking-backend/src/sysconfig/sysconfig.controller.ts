@@ -56,4 +56,17 @@ export class SysconfigController {
   deleteSoftware(@Param('id') id: string) {
     return this.sysconfigService.deleteSoftware(+id);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('working-hours')
+  getWorkingHourRules() {
+    return this.sysconfigService.getWorkingHourRules();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Post('working-hours')
+  setWorkingHourRules(@Body('rules') rules: any[]) {
+    return this.sysconfigService.setWorkingHourRules(rules);
+  }
 }

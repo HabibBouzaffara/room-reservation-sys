@@ -74,4 +74,33 @@
       </ul>
     </section>
   </div>
+
+  <div class="flex gap-4" style="margin-top: 1.5rem;">
+    <section class="admin-section" style="width: 100%;">
+      <h3>Working Hours Rules</h3>
+      <div class="config-input flex gap-2 items-center flex-wrap">
+        <label style="font-size: 0.85rem;">From:</label>
+        <input type="date" [(ngModel)]="newRuleStart" style="padding: 0.3rem;" />
+        <label style="font-size: 0.85rem;">To:</label>
+        <input type="date" [(ngModel)]="newRuleEnd" style="padding: 0.3rem;" />
+        <label style="font-size: 0.85rem;">Hours:</label>
+        <input type="number" [(ngModel)]="newRuleStartHour" style="width: 60px; padding: 0.3rem;" min="0" max="23" />
+        <span> - </span>
+        <input type="number" [(ngModel)]="newRuleEndHour" style="width: 60px; padding: 0.3rem;" min="0" max="23" />
+        <button class="btn" (click)="addWorkingHourRule()">Add Rule</button>
+      </div>
+      <ul class="config-list">
+        <li *ngFor="let rule of workingHourRules; let i = index" style="justify-content: space-between; display: flex; align-items: center; padding: 0.5rem; border-bottom: 1px solid var(--glass-border);">
+          <div>
+            <strong style="color: var(--primary-color);">Period:</strong> {{ rule.startDate | date:'mediumDate' }} → {{ rule.endDate | date:'mediumDate' }}
+            <span style="margin-left: 1rem;"><strong style="color: var(--primary-color);">Hours:</strong> {{ rule.startHour }}:00 - {{ rule.endHour }}:00</span>
+          </div>
+          <button class="btn-delete" (click)="deleteWorkingHourRule(i)">×</button>
+        </li>
+      </ul>
+      <div *ngIf="workingHourRules.length === 0" style="padding: 1rem; color: var(--text-secondary); text-align: center;">
+        No specific working hours defined. Defaulting to 8:00 - 17:00 globally.
+      </div>
+    </section>
+  </div>
 </div>

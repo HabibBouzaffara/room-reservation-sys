@@ -1,0 +1,708 @@
+- Generating browser application bundles (phase: setup)...
+[32m✔[39m Browser application bundle generation complete.
+[32m✔[39m Browser application bundle generation complete.
+[1m[33m
+Warning: [96msrc/app/app.component.html[0m:[93m6[0m:[93m20[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m6[0m     <ng-container *ngIf="authService.isAuthenticated(); else unauthLinks">
+[7m [0m [93m                   ~~~~[0m
+
+  [96msrc/app/app.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './app.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component AppComponent.
+
+
+Warning: [96msrc/app/app.component.html[0m:[93m9[0m:[93m11[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m9[0m       <a *ngIf="authService.getRole() === 'ADMIN'" routerLink="/admin">Admin Dashboard</a>
+[7m [0m [93m          ~~~~[0m
+
+  [96msrc/app/app.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './app.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component AppComponent.
+
+
+Warning: [96msrc/app/app.component.html[0m:[93m10[0m:[93m11[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m10[0m       <a *ngIf="authService.getRole() === 'ADMIN'" routerLink="/history">History</a>
+[7m  [0m [93m          ~~~~[0m
+
+  [96msrc/app/app.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './app.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component AppComponent.
+
+
+Warning: [96msrc/app/components/admin-dashboard/admin-dashboard.component.html[0m:[93m18[0m:[93m16[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m18[0m           <tr *ngFor="let user of users">
+[7m  [0m [93m               ~~~~~[0m
+
+  [96msrc/app/components/admin-dashboard/admin-dashboard.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './admin-dashboard.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component AdminDashboardComponent.
+
+
+Warning: [96msrc/app/components/admin-dashboard/admin-dashboard.component.html[0m:[93m28[0m:[93m24[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m28[0m               <button *ngIf="!user.isApproved" class="btn btn-small" (click)="approveUser(user.id)">Approve</button>
+[7m  [0m [93m                       ~~~~[0m
+
+  [96msrc/app/components/admin-dashboard/admin-dashboard.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './admin-dashboard.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component AdminDashboardComponent.
+
+
+Warning: [96msrc/app/components/admin-dashboard/admin-dashboard.component.html[0m:[93m38[0m:[93m16[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m38[0m       <button *ngFor="let rm of rooms"
+[7m  [0m [93m               ~~~~~[0m
+
+  [96msrc/app/components/admin-dashboard/admin-dashboard.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './admin-dashboard.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component AdminDashboardComponent.
+
+
+Warning: [96msrc/app/components/admin-dashboard/admin-dashboard.component.html[0m:[93m56[0m:[93m14[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m56[0m         <li *ngFor="let hw of hardwareList">
+[7m  [0m [93m             ~~~~~[0m
+
+  [96msrc/app/components/admin-dashboard/admin-dashboard.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './admin-dashboard.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component AdminDashboardComponent.
+
+
+Warning: [96msrc/app/components/admin-dashboard/admin-dashboard.component.html[0m:[93m70[0m:[93m14[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m70[0m         <li *ngFor="let sw of softwareList">
+[7m  [0m [93m             ~~~~~[0m
+
+  [96msrc/app/components/admin-dashboard/admin-dashboard.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './admin-dashboard.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component AdminDashboardComponent.
+
+
+Warning: [96msrc/app/components/history/history.component.html[0m:[93m6[0m:[93m34[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m6[0m   <div class="card glass-panel" *ngFor="let log of historyLogs" style="padding: 1rem 2rem;">
+[7m [0m [93m                                 ~~~~~[0m
+
+  [96msrc/app/components/history/history.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './history.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component HistoryComponent.
+
+
+Warning: [96msrc/app/components/history/history.component.html[0m:[93m27[0m:[93m56[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m27[0m     <div class="flex gap-4" style="margin-top: 1rem;" *ngIf="log.action !== 'DELETE_RESERVATION'">
+[7m  [0m [93m                                                       ~~~~[0m
+
+  [96msrc/app/components/history/history.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './history.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component HistoryComponent.
+
+
+Warning: [96msrc/app/components/history/history.component.html[0m:[93m40[0m:[93m9[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m40[0m   <div *ngIf="historyLogs.length === 0" style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
+[7m  [0m [93m        ~~~~[0m
+
+  [96msrc/app/components/history/history.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './history.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component HistoryComponent.
+
+
+Warning: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m27[0m:[93m18[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m27[0m         <option *ngFor="let act of activities" [value]="act">{{ act }}</option>
+[7m  [0m [93m                 ~~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationFormComponent.
+
+
+Warning: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m31[0m:[93m11[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m31[0m     <div *ngIf="activityType === 'Other'" style="margin-bottom: 1rem;">
+[7m  [0m [93m          ~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationFormComponent.
+
+
+Warning: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m40[0m:[93m18[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m40[0m         <option *ngFor="let hw of hardwareList" [value]="hw.name" [disabled]="hw.available <= 0">
+[7m  [0m [93m                 ~~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationFormComponent.
+
+
+Warning: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m44[0m:[93m70[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m44[0m       <div style="display: flex; align-items: center; gap: 0.5rem;" *ngIf="hardware && hardware !== '-'">
+[7m  [0m [93m                                                                     ~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationFormComponent.
+
+
+Warning: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m56[0m:[93m18[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m56[0m         <option *ngFor="let sw of softwareList" [value]="sw.name">{{ sw.name }}</option>
+[7m  [0m [93m                 ~~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationFormComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m3[0m:[93m14[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m3[0m     <button *ngFor="let rm of rooms"
+[7m [0m [93m             ~~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m19[0m:[93m36[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m19[0m           <div class="time-label" *ngFor="let t of timeLabels" [style.height.px]="60 * PIXELS_PER_MINUTE">
+[7m  [0m [93m                                   ~~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m26[0m:[93m30[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m26[0m     <div class="week-group" *ngFor="let w of weeks; let i = index">
+[7m  [0m [93m                             ~~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m29[0m:[93m19[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m29[0m           <input *ngIf="isAdmin" type="number" [value]="w.cw" (change)="updateWeek($any($event.target).value, i)" style="width: 70px; background: var(--input-bg); border: 1px solid var(--glass-border); color: var(--text-color); text-align: center; border-radius: 4px;" />
+[7m  [0m [93m                  ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m30[0m:[93m18[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m30[0m           <span *ngIf="!isAdmin">{{ w.name }}</span>
+[7m  [0m [93m                 ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m33[0m:[93m36[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m33[0m           <div class="day-column" *ngFor="let d of w.days" [class.is-today]="isToday(d.date)">
+[7m  [0m [93m                                   ~~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m37[0m:[93m23[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m37[0m                 <div *ngIf="isToday(d.date)" class="today-dot"></div>
+[7m  [0m [93m                      ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m47[0m:[93m23[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m47[0m                 <div *ngIf="isDragging && dragDay === d"
+[7m  [0m [93m                      ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m54[0m:[93m41[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m54[0m                 <div class="grid-line" *ngFor="let t of timeLabels" [style.height.px]="60 * PIXELS_PER_MINUTE"></div>
+[7m  [0m [93m                                        ~~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m57[0m:[93m23[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngFor` directive was used in the template, but neither the `NgFor` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @for or make sure that either the `NgFor` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m57[0m                 <div *ngFor="let r of d.reservations"
+[7m  [0m [93m                      ~~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m63[0m:[93m26[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m63[0m                    <div *ngIf="r.type === 'BUFFER'; else normalContent" class="buffer-content">
+[7m  [0m [93m                         ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m68[0m:[93m33[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m68[0m                          <span *ngIf="r.isHardwareOnly" style="color: var(--warning-color, #fbbf24)">[HW] </span>
+[7m  [0m [93m                                ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m73[0m:[93m46[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m73[0m                       <div class="res-body" *ngIf="getHeight(r) > 50">HW: {{ r.hardware }}</div>
+[7m  [0m [93m                                             ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m74[0m:[93m46[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m74[0m                       <div class="res-body" *ngIf="getHeight(r) > 65">SW: {{ r.software }}</div>
+[7m  [0m [93m                                             ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m75[0m:[93m49[0m - [93mwarning[0m[90m NG8103: [0mNG8103: The `*ngIf` directive was used in the template, but neither the `NgIf` directive nor the `CommonModule` was imported. Use Angular's built-in control flow @if or make sure that either the `NgIf` directive or the `CommonModule` is included in the `@Component.imports` array of this component. Find more at https://v21.angular.dev/extended-diagnostics/NG8103
+
+[7m75[0m                       <div class="res-actions" *ngIf="canModify(r)">
+[7m  [0m [93m                                                ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component ReservationListComponent.
+
+
+Warning: C:/Users/LENOVO/Desktop/-5ans/room-reservation-sys/frontend/src/app/components/reservation-list/reservation-list.component.css exceeded maximum budget. Budget 2.00 kB was not met by 1.79 kB with a total of 3.79 kB.
+
+[39m[22m
+[1m[31m
+Error: [96mnode_modules/@angular/core/types/_discovery-chunk.d.ts[0m:[93m12[0m:[93m86[0m - [91merror[0m[90m TS2307: [0mCannot find module '@angular/core/primitives/di' or its corresponding type declarations.
+
+[7m12[0m import { Injector as Injector$1, InjectionToken as InjectionToken$1, NotFound } from '@angular/core/primitives/di';
+[7m  [0m [91m                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Error: [96mnode_modules/@angular/platform-browser/types/platform-browser.d.ts[0m:[93m10[0m:[93m42[0m - [91merror[0m[90m TS2307: [0mCannot find module '@angular/common/http' or its corresponding type declarations.
+
+[7m10[0m import { HttpTransferCacheOptions } from '@angular/common/http';
+[7m  [0m [91m                                         ~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Error: [96msrc/app/app.component.html[0m:[93m24[0m:[93m3[0m - [91merror[0m[90m NG8001: [0m'router-outlet' is not a known element:
+1. If 'router-outlet' is an Angular component, then verify that it is included in the '@Component.imports' of this component.
+2. If 'router-outlet' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@Component.schemas' of this component to suppress this message.
+
+[7m24[0m   <router-outlet></router-outlet>
+[7m  [0m [91m  ~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/app.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './app.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component AppComponent.
+
+
+Error: [96msrc/app/app.module.ts[0m:[93m3[0m:[93m34[0m - [91merror[0m[90m TS2307: [0mCannot find module '@angular/common/http' or its corresponding type declarations.
+
+[7m3[0m import { HttpClientModule } from '@angular/common/http'; // ✅ ADD THIS
+[7m [0m [91m                                 ~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Error: [96msrc/app/app.module.ts[0m:[93m13[0m:[93m35[0m - [91merror[0m[90m TS2307: [0mCannot find module '@angular/common/http' or its corresponding type declarations.
+
+[7m13[0m import { HTTP_INTERCEPTORS } from '@angular/common/http';
+[7m  [0m [91m                                  ~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Error: [96msrc/app/app.module.ts[0m:[93m28[0m:[93m12[0m - [91merror[0m[90m NG1010: [0mValue
+
+Error: [96msrc/app/components/admin-dashboard/admin-dashboard.component.html[0m:[93m40[0m:[93m15[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngClass' since it isn't a known property of 'button'.
+
+[7m40[0m               [ngClass]="selectedRoom === rm ? '' : 'btn-secondary'"
+[7m  [0m [91m              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/admin-dashboard/admin-dashboard.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './admin-dashboard.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component AdminDashboardComponent.
+
+
+Error: [96msrc/app/components/admin-dashboard/admin-dashboard.component.html[0m:[93m51[0m:[93m28[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'input'.
+
+[7m51[0m         <input type="text" [(ngModel)]="newHardware" placeholder="Add Hardware (e.g. D5)" />
+[7m  [0m [91m                           ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/admin-dashboard/admin-dashboard.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './admin-dashboard.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component AdminDashboardComponent.
+
+
+Error: [96msrc/app/components/admin-dashboard/admin-dashboard.component.html[0m:[93m52[0m:[93m30[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'input'.
+
+[7m52[0m         <input type="number" [(ngModel)]="newHardwareQty" placeholder="Qty" style="width: 70px" min="1" />
+[7m  [0m [91m                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/admin-dashboard/admin-dashboard.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './admin-dashboard.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component AdminDashboardComponent.
+
+
+Error: [96msrc/app/components/admin-dashboard/admin-dashboard.component.html[0m:[93m66[0m:[93m28[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'input'.
+
+[7m66[0m         <input type="text" [(ngModel)]="newSoftware" placeholder="Add Software (e.g. 102.10.20)" />
+[7m  [0m [91m                           ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/admin-dashboard/admin-dashboard.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './admin-dashboard.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component AdminDashboardComponent.
+
+
+Error: [96msrc/app/components/history/history.component.html[0m:[93m8[0m:[93m27[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngClass' since it isn't a known property of 'span'.
+
+[7m  8[0m       <span class="badge" [ngClass]="{
+[7m   [0m [91m                          ~~~~~~~~~~~~[0m
+[7m  9[0m           'badge-success': log.action === 'CREATE_RESERVATION',
+[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m...[0m 
+[7m 11[0m           'badge-warning': log.action === 'DELETE_RESERVATION'
+[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m 12[0m         }">
+[7m   [0m [91m~~~~~~~~~~[0m
+
+  [96msrc/app/components/history/history.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './history.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component HistoryComponent.
+
+
+Error: [96msrc/app/components/history/history.component.html[0m:[93m16[0m:[93m28[0m - [91merror[0m[90m NG8004: [0mNo pipe found with name 'date'.
+To fix this, import the "DatePipe" class from "@angular/common" and add it to the "imports" array of the component.
+
+[7m16[0m         {{ log.timestamp | date:'medium' }}
+[7m  [0m [91m                           ~~~~[0m
+
+  [96msrc/app/components/history/history.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './history.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component HistoryComponent.
+
+
+Error: [96msrc/app/components/history/history.component.html[0m:[93m30[0m:[93m116[0m - [91merror[0m[90m NG8004: [0mNo pipe found with name 'json'.
+To fix this, import the "JsonPipe" class from "@angular/common" and add it to the "imports" array of the component.
+
+[7m30[0m         <pre style="margin: 0; font-size: 0.8rem; overflow: auto; color: var(--text-secondary);">{{ log.oldValue | json }}</pre>
+[7m  [0m [91m                                                                                                                   ~~~~[0m
+
+  [96msrc/app/components/history/history.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './history.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component HistoryComponent.
+
+
+Error: [96msrc/app/components/history/history.component.html[0m:[93m35[0m:[93m112[0m - [91merror[0m[90m NG8004: [0mNo pipe found with name 'json'.
+To fix this, import the "JsonPipe" class from "@angular/common" and add it to the "imports" array of the component.
+
+[7m35[0m         <pre style="margin: 0; font-size: 0.8rem; overflow: auto; color: var(--text-color);">{{ log.newValue | json }}</pre>
+[7m  [0m [91m                                                                                                               ~~~~[0m
+
+  [96msrc/app/components/history/history.component.ts[0m:[93m6[0m:[93m16[0m
+    [7m6[0m   templateUrl: './history.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component HistoryComponent.
+
+
+Error: [96msrc/app/components/login/login.component.html[0m:[93m7[0m:[93m27[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'input'.
+
+[7m7[0m       <input type="email" [(ngModel)]="email" name="email" required placeholder="you@example.com" />
+[7m [0m [91m                          ~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/login/login.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './login.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component LoginComponent.
+
+
+Error: [96msrc/app/components/register/register.component.html[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'input'.
+
+[7m7[0m       <input type="text" [(ngModel)]="name" name="name" required placeholder="John Doe" />
+[7m [0m [91m                         ~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/register/register.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './register.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component RegisterComponent.
+
+
+Error: [96msrc/app/components/register/register.component.html[0m:[93m12[0m:[93m27[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'input'.
+
+[7m12[0m       <input type="email" [(ngModel)]="email" name="email" required placeholder="you@example.com" />
+[7m  [0m [91m                          ~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/register/register.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './register.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component RegisterComponent.
+
+
+Error: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m14[0m:[93m38[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'input'.
+
+[7m14[0m         <input type="datetime-local" [(ngModel)]="startTime" (change)="loadSysConfig()" name="startTime" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);" />
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationFormComponent.
+
+
+Error: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m19[0m:[93m38[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'input'.
+
+[7m19[0m         <input type="datetime-local" [(ngModel)]="endTime" (change)="loadSysConfig()" name="endTime" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);" />
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationFormComponent.
+
+
+Error: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m25[0m:[93m15[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'select'.
+
+[7m25[0m       <select [(ngModel)]="activityType" name="activityType" required style="margin-bottom: 1rem; width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
+[7m  [0m [91m              ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationFormComponent.
+
+
+Error: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m33[0m:[93m26[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'input'.
+
+[7m33[0m       <input type="text" [(ngModel)]="activityDesc" name="activityDesc" placeholder="Describe your activity" required />
+[7m  [0m [91m                         ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationFormComponent.
+
+
+Error: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m38[0m:[93m15[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'select'.
+
+[7m38[0m       <select [(ngModel)]="hardware" name="hardware" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color); margin-bottom: 0.5rem;">
+[7m  [0m [91m              ~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationFormComponent.
+
+
+Error: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m45[0m:[93m44[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'input'.
+
+[7m45[0m         <input type="checkbox" id="hwOnly" [(ngModel)]="isHardwareOnly" name="isHardwareOnly" style="width: auto; height: 18px; margin: 0; cursor: pointer;" />
+[7m  [0m [91m                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationFormComponent.
+
+
+Error: [96msrc/app/components/reservation-form/reservation-form.component.html[0m:[93m54[0m:[93m15[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngModel' since it isn't a known property of 'select'.
+
+[7m54[0m       <select [(ngModel)]="software" name="software" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
+[7m  [0m [91m              ~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/reservation-form/reservation-form.component.ts[0m:[93m7[0m:[93m16[0m
+    [7m7[0m   templateUrl: './reservation-form.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationFormComponent.
+
+
+Error: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngClass' since it isn't a known property of 'button'.
+
+[7m5[0m             [ngClass]="selectedRoom === rm ? '' : 'btn-secondary'"
+[7m [0m [91m            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationListComponent.
+
+
+Error: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m10[0m:[93m54[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'queryParams' since it isn't a known property of 'button'.
+
+[7m10[0m   <button class="btn" routerLink="/reservations/new" [queryParams]="{ room: selectedRoom }">Book a Room</button>
+[7m  [0m [91m                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationListComponent.
+
+
+Error: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m36[0m:[93m51[0m - [91merror[0m[90m NG8004: [0mNo pipe found with name 'date'.
+To fix this, import the "DatePipe" class from "@angular/common" and add it to the "imports" array of the component.
+
+[7m36[0m                 <div class="day-date">{{ d.date | date:'mediumDate' }}</div>
+[7m  [0m [91m                                                  ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationListComponent.
+
+
+Error: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m59[0m:[93m22[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'ngClass' since it isn't a known property of 'div'.
+
+[7m59[0m                      [ngClass]="r.type === 'BUFFER' ? 'res-buffer' : (r.isHardwareOnly ? 'res-hw-only' : 'res-normal')"
+[7m  [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationListComponent.
+
+
+Error: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m71[0m:[93m62[0m - [91merror[0m[90m NG8004: [0mNo pipe found with name 'date'.
+To fix this, import the "DatePipe" class from "@angular/common" and add it to the "imports" array of the component.
+
+[7m71[0m                       <div class="res-body">{{ r.startTime | date:'shortTime' }} - {{ r.endTime | date:'shortTime' }}</div>
+[7m  [0m [91m                                                             ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationListComponent.
+
+
+Error: [96msrc/app/components/reservation-list/reservation-list.component.html[0m:[93m71[0m:[93m99[0m - [91merror[0m[90m NG8004: [0mNo pipe found with name 'date'.
+To fix this, import the "DatePipe" class from "@angular/common" and add it to the "imports" array of the component.
+
+[7m71[0m                       <div class="res-body">{{ r.startTime | date:'shortTime' }} - {{ r.endTime | date:'shortTime' }}</div>
+[7m  [0m [91m                                                                                                  ~~~~[0m
+
+  [96msrc/app/components/reservation-list/reservation-list.component.ts[0m:[93m8[0m:[93m16[0m
+    [7m8[0m   templateUrl: './reservation-list.component.html',
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Error occurs in the template of component ReservationListComponent.
+
+
+Error: [96msrc/app/interceptors/jwt.interceptor.ts[0m:[93m7[0m:[93m8[0m - [91merror[0m[90m TS2307: [0mCannot find module '@angular/common/http' or its corresponding type declarations.
+
+[7m7[0m } from '@angular/common/http';
+[7m [0m [91m       ~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Error: [96msrc/app/services/auth.service.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2307: [0mCannot find module '@angular/common/http' or its corresponding type declarations.
+
+[7m2[0m import { HttpClient } from '@angular/common/http';
+[7m [0m [91m                           ~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Error: [96msrc/app/services/auth.service.ts[0m:[93m11[0m:[93m23[0m - [91merror[0m[90m NG2003: [0mNo suitable injection token for parameter 'http' of class 'AuthService'.
+  Consider using the @Inject decorator to specify an injection token.
+
+[7m11[0m   constructor(private http: HttpClient) {}
+[7m  [0m [91m                      ~~~~[0m
+
+  [96msrc/app/services/auth.service.ts[0m:[93m11[0m:[93m29[0m
+    [7m11[0m   constructor(private http: HttpClient) {}
+    [7m  [0m [96m                            ~~~~~~~~~~[0m
+    This type does not have a value, so it cannot be used as injection token.
+
+
+Error: [96msrc/app/services/reservations.service.ts[0m:[93m2[0m:[93m40[0m - [91merror[0m[90m TS2307: [0mCannot find module '@angular/common/http' or its corresponding type declarations.
+
+[7m2[0m import { HttpClient, HttpParams } from '@angular/common/http';
+[7m [0m [91m                                       ~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Error: [96msrc/app/services/reservations.service.ts[0m:[93m11[0m:[93m23[0m - [91merror[0m[90m NG2003: [0mNo suitable injection token for parameter 'http' of class 'ReservationsService'.
+  Consider using the @Inject decorator to specify an injection token.
+
+[7m11[0m   constructor(private http: HttpClient) {}
+[7m  [0m [91m                      ~~~~[0m
+
+  [96msrc/app/services/reservations.service.ts[0m:[93m11[0m:[93m29[0m
+    [7m11[0m   constructor(private http: HttpClient) {}
+    [7m  [0m [96m                            ~~~~~~~~~~[0m
+    This type does not have a value, so it cannot be used as injection token.
+
+
+[39m[22m

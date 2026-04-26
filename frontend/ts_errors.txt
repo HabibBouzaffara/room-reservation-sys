@@ -1,0 +1,1 @@
+src/app/guards/auth.guard.spec.ts(4,10): error TS2724: '"./auth.guard"' has no exported member named 'authGuard'. Did you mean 'AuthGuard'?

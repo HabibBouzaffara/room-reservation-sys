@@ -1,0 +1,15 @@
+- Generating browser application bundles (phase: setup)...
+[32m✔[39m Browser application bundle generation complete.
+[32m✔[39m Browser application bundle generation complete.
+[1m[33m
+Warning: C:/Users/LENOVO/Desktop/-5ans/room-reservation-sys/frontend/src/app/components/history/history.component.css exceeded maximum budget. Budget 2.00 kB was not met by 2.43 kB with a total of 4.43 kB.
+
+Warning: C:/Users/LENOVO/Desktop/-5ans/room-reservation-sys/frontend/src/app/components/reservation-list/reservation-list.component.css exceeded maximum budget. Budget 2.00 kB was not met by 6.36 kB with a total of 8.36 kB.
+
+[39m[22m
+[1m[31m
+Error: C:/Users/LENOVO/Desktop/-5ans/room-reservation-sys/frontend/src/app/components/history/history.component.css exceeded maximum budget. Budget 4.00 kB was not met by 429 bytes with a total of 4.43 kB.
+
+Error: C:/Users/LENOVO/Desktop/-5ans/room-reservation-sys/frontend/src/app/components/reservation-list/reservation-list.component.css exceeded maximum budget. Budget 4.00 kB was not met by 4.36 kB with a total of 8.36 kB.
+
+[39m[22m

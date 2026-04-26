@@ -51,10 +51,16 @@
 
     <div>
       <label>Software needed *</label>
-      <select [(ngModel)]="software" name="software" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
+      <select [(ngModel)]="softwareSelection" name="softwareSelection" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);">
         <option value="" disabled selected>Select software</option>
         <option *ngFor="let sw of softwareList" [value]="sw.name">{{ sw.name }}</option>
+        <option value="Other">Other (Type Custom)</option>
       </select>
+    </div>
+
+    <div *ngIf="softwareSelection === 'Other'" style="margin-top: 1rem;">
+      <label>Custom Software *</label>
+      <input type="text" [(ngModel)]="customSoftware" name="customSoftware" placeholder="Describe your software" required style="width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-color);" />
     </div>
 
     <div class="flex gap-2" style="margin-top: 2rem;">

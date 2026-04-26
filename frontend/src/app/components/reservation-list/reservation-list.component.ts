@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReservationsService } from '../../services/reservations.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-reservation-list',
   templateUrl: './reservation-list.component.html',
   styleUrls: ['./reservation-list.component.css']
@@ -18,24 +19,61 @@ export class ReservationListComponent implements OnInit {
   weeks: any[] = [];
   timeLabels: string[] = [];
 
-  PIXELS_PER_MINUTE = 1; // 60px per hour, was 120px
-  START_HOUR = 8; // 08:00
-  END_HOUR = 18; // 18:00
+  PIXELS_PER_MINUTE = 1;
+  START_HOUR = 8;
+  END_HOUR = 18;
 
-  weekOffset = 0;
+  weekOffset = -1;
   baseDate = new Date();
+  
+  isFirstLoad = true;
+  @ViewChild('calendarScroll') calendarContainer!: ElementRef;
+
+  // ── History Modal State ────────────────────────────────
+  historyModalOpen = false;
+  historyModalRes: any = null;     // the reservation being inspected
+  historyEvents: any[] = [];       // parsed events for that reservation
+  historyPageIndex = 0;            // which event is shown
+  historyLoading = false;
+  usersMap: Record<number, any> = {};
+
+  workingHourRules: any[] = [];
 
   constructor(
     private reservationsService: ReservationsService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.currentUserId = this.authService.getUserId();
     this.isAdmin = this.authService.getRole() === 'ADMIN';
-    this.generateTimeLabels();
-    this.loadReservations();
+    this.reservationsService.getWorkingHours().subscribe({
+      next: (rules) => {
+        if (rules && Array.isArray(rules)) {
+          this.workingHourRules = rules;
+        }
+        this.updateEffectiveHours();
+        this.generateTimeLabels();
+        this.loadReservations();
+      },
+      error: () => {
+        this.generateTimeLabels();
+        this.loadReservations();
+      }
+    });
+
+    // Pre-load users map for history name resolution
+    this.reservationsService.getUsers().subscribe({
+      next: (users: any[]) => users.forEach(u => this.usersMap[u.id] = u),
+      error: () => {}
+    });
+  }
+
+  updateEffectiveHours() {
+      this.START_HOUR = 8;
+      this.END_HOUR = 18;
   }
 
   generateTimeLabels() {
@@ -89,6 +127,46 @@ export class ReservationListComponent implements OnInit {
                   rDate.getFullYear() === date.getFullYear();
         });
 
+        // Determine working hours for this specific day
+        let dayStart = 8;
+        let dayEnd = 18;
+        for (const rule of this.workingHourRules) {
+            const rStart = new Date(rule.startDate);
+            rStart.setHours(0,0,0,0);
+            const rEnd = new Date(rule.endDate);
+            rEnd.setHours(23,59,59,999);
+            
+            if (date.getTime() >= rStart.getTime() && date.getTime() <= rEnd.getTime()) {
+               dayStart = rule.startHour;
+               dayEnd = rule.endHour;
+               break;
+            }
+        }
+
+        // Generate Out of Office blocks
+        if (dayStart > this.START_HOUR) {
+           dayReservations.push({
+             id: 'ooo_start',
+             type: 'OUT_OF_OFFICE',
+             startTime: new Date(date).setHours(this.START_HOUR, 0, 0, 0),
+             endTime: new Date(date).setHours(dayStart, 0, 0, 0),
+             isHardwareOnly: false,
+             activity: 'Closed',
+             user: { name: 'Admin/System' }
+           });
+        }
+        if (dayEnd < this.END_HOUR) {
+           dayReservations.push({
+             id: 'ooo_end',
+             type: 'OUT_OF_OFFICE',
+             startTime: new Date(date).setHours(dayEnd, 0, 0, 0),
+             endTime: new Date(date).setHours(this.END_HOUR, 0, 0, 0),
+             isHardwareOnly: false,
+             activity: 'Closed',
+             user: { name: 'Admin/System' }
+           });
+        }
+
         days.push({
           date: date,
           name: date.toLocaleDateString('en-US', { weekday: 'short' }),
@@ -102,6 +180,43 @@ export class ReservationListComponent implements OnInit {
         days: days
       });
     }
+
+    if (this.isFirstLoad) {
+       this.isFirstLoad = false;
+       this.cdr.detectChanges();
+       this.scrollToCurrentDay();
+    }
+  }
+
+  scrollToCurrentDay() {
+    if (!this.calendarContainer) return;
+    
+    const today = new Date();
+    const isWeekend = today.getDay() === 0 || today.getDay() === 6;
+
+    const timeColumnWidth = 60;
+    const weekWidth = 1260; // 5 days * 252px approx
+    const dayWidth = 252;
+    
+    // We start at CW-1. So the offset to the start of the current week (CW) is:
+    const currentWeekStartOffset = timeColumnWidth + weekWidth;
+    
+    let targetOffset = 0;
+
+    if (isWeekend) {
+        // Center the blue line between CW (the week that just ended) and CW+1 (upcoming week)
+        targetOffset = currentWeekStartOffset + weekWidth; 
+    } else {
+        let dayIndex = today.getDay() - 1; // Mon = 0
+        targetOffset = currentWeekStartOffset + (dayIndex * dayWidth) + (dayWidth / 2);
+    }
+    
+    const clientWidth = this.calendarContainer.nativeElement.clientWidth;
+    let targetScrollLeft = targetOffset - (clientWidth / 2);
+    
+    if (targetScrollLeft < 0) targetScrollLeft = 0;
+    
+    this.calendarContainer.nativeElement.scrollLeft = targetScrollLeft;
   }
 
   updateWeek(newCw: any, weekIndex: number) {
@@ -109,7 +224,40 @@ export class ReservationListComponent implements OnInit {
     if (isNaN(val)) return;
     const diff = val - this.weeks[weekIndex].cw;
     this.weekOffset += diff;
+    this.updateEffectiveHours();
+    this.generateTimeLabels();
     this.buildCalendar();
+  }
+
+  jumpToToday() {
+    this.weekOffset = -1;
+    this.updateEffectiveHours();
+    this.generateTimeLabels();
+    this.buildCalendar();
+    this.cdr.detectChanges();
+    this.scrollToCurrentDay();
+  }
+
+  isAutoScrolling = false;
+  onScroll(event: Event) {
+    if (this.isAutoScrolling) return;
+
+    const el = event.target as HTMLElement;
+    
+    // Scrolled perfectly to the left edge
+    if (el.scrollLeft <= 5) {
+       this.isAutoScrolling = true;
+       this.weekOffset--;
+       this.updateEffectiveHours();
+       this.generateTimeLabels();
+       this.buildCalendar();
+       
+       this.cdr.detectChanges();
+       
+       // Reposition the scroll synchronously so the user stays on the week they were looking at
+       el.scrollLeft += 1260; // width of one inserted week
+       this.isAutoScrolling = false;
+    }
   }
 
   isToday(date: Date): boolean {
@@ -125,6 +273,33 @@ export class ReservationListComponent implements OnInit {
       const yearStart = new Date(Date.UTC(dateCopy.getUTCFullYear(),0,1));
       const weekNo = Math.ceil(( ( (dateCopy.getTime() - yearStart.getTime()) / 86400000) + 1)/7);
       return weekNo;
+  }
+
+  getActivityColor(act: string): string {
+    switch(act) {
+      case 'FV': return '#10b981'; 
+      case 'Coverage': return '#f59e0b';
+      case 'Pr testing': return '#3b82f6';
+      case 'DV': return '#8b5cf6';
+      case 'Intake': return '#ec4899';
+      case 'Fusi': return '#14b8a6';
+      case 'Workshop': return '#f97316';
+      default: return '#6366f1'; 
+    }
+  }
+
+  getActivityBg(act: string): string {
+    switch(act) {
+      case 'FV': return 'rgba(16, 185, 129, 0.15)'; 
+      case 'Coverage': return 'rgba(245, 158, 11, 0.15)';
+      case 'Pr testing': return 'rgba(59, 130, 246, 0.15)';
+      case 'DV': return 'rgba(139, 92, 246, 0.15)';
+      case 'Intake': return 'rgba(236, 72, 153, 0.15)';
+      case 'Fusi': return 'rgba(20, 184, 166, 0.15)';
+      case 'Workshop': return 'rgba(249, 115, 22, 0.15)';
+      case 'Closed': return 'rgba(200, 200, 200, 0.6)';
+      default: return 'var(--card-bg)';
+    }
   }
 
   getTopPos(r: any): number {
@@ -162,7 +337,7 @@ export class ReservationListComponent implements OnInit {
   }
 
   canModify(r: any): boolean {
-    if (r.type === 'BUFFER') return false; 
+    if (r.type === 'BUFFER' || r.type === 'OUT_OF_OFFICE') return false; 
     return this.isAdmin || r.userId === this.currentUserId;
   }
 
@@ -231,14 +406,6 @@ export class ReservationListComponent implements OnInit {
     let endTime = new Date(day.date);
     endTime.setHours(endHours, eMins, 0, 0);
 
-    // Enforce 8 AM - 6 PM
-    if (startTime.getHours() < 8) {
-       startTime.setHours(8, 0, 0, 0);
-    }
-    if (endTime.getHours() > 18 || (endTime.getHours() === 18 && endTime.getMinutes() > 0)) {
-       endTime.setHours(18, 0, 0, 0);
-    }
-    
     // Check for negative or too short duration after clamping
     if (endTime.getTime() <= startTime.getTime()) {
        endTime = new Date(startTime.getTime() + 60 * 60000);
@@ -276,6 +443,14 @@ export class ReservationListComponent implements OnInit {
        }
     }
 
+    const maxEndTime = new Date(day.date);
+    maxEndTime.setHours(this.END_HOUR, 0, 0, 0);
+
+    if (startTime.getTime() >= maxEndTime.getTime() || endTime.getTime() > maxEndTime.getTime()) {
+       alert('Cannot reserve outside of working hours.');
+       return;
+    }
+
     this.router.navigate(['/reservations/new'], {
       queryParams: {
         start: startTime.toISOString(),
@@ -292,4 +467,67 @@ export class ReservationListComponent implements OnInit {
   getDragBoxHeight(): number {
     return Math.abs(this.dragCurrentY - this.dragStartY);
   }
+
+  // ── History Modal ──────────────────────────────────────────
+  openHistoryModal(r: any, event: Event) {
+    event.stopPropagation();
+    this.historyModalRes = r;
+    this.historyModalOpen = true;
+    this.historyPageIndex = 0;
+    this.historyEvents = [];
+    this.historyLoading = true;
+
+    this.reservationsService.getReservationHistory(r.id).subscribe({
+      next: (logs: any[]) => {
+        this.historyEvents = logs
+          .map(log => this.parseHistoryLog(log))
+          .filter(log => log.oldRes?.type !== 'BUFFER' && log.newRes?.type !== 'BUFFER');
+        this.historyLoading = false;
+      },
+      error: () => {
+        this.historyLoading = false;
+        alert('Could not load history for this reservation.');
+      }
+    });
+  }
+
+  closeHistoryModal() {
+    this.historyModalOpen = false;
+    this.historyModalRes = null;
+    this.historyEvents = [];
+  }
+
+  getHistoryUserName(id: number | undefined | null): string {
+    if (!id) return 'Unknown';
+    return this.usersMap[id]?.name || `User #${id}`;
+  }
+
+  parseHistoryLog(log: any) {
+    let oldRes: any = null;
+    let newRes: any = null;
+    if (log.action === 'CREATE_RESERVATION') {
+      newRes = log.newValue?.reservation || log.newValue;
+    } else if (log.action === 'UPDATE_RESERVATION') {
+      oldRes = log.oldValue?.reservation || log.oldValue;
+      newRes = log.newValue?.reservation || log.newValue;
+    } else if (log.action === 'DELETE_RESERVATION') {
+      oldRes = log.oldValue?.reservation || log.oldValue;
+    }
+    return {
+      ...log,
+      oldRes,
+      newRes,
+      actorName: this.getHistoryUserName(log.performedBy),
+      isCreation: log.action === 'CREATE_RESERVATION',
+      isModification: log.action === 'UPDATE_RESERVATION',
+      isSuppression: log.action === 'DELETE_RESERVATION',
+    };
+  }
+
+  currentHistoryEvent() {
+    return this.historyEvents[this.historyPageIndex];
+  }
+
+  prevHistoryPage() { if (this.historyPageIndex > 0) this.historyPageIndex--; }
+  nextHistoryPage() { if (this.historyPageIndex < this.historyEvents.length - 1) this.historyPageIndex++; }
 }

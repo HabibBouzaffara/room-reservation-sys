@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ReservationsService } from '../../services/reservations.service';
 
 @Component({
+  standalone: false,
   selector: 'app-reservation-form',
   templateUrl: './reservation-form.component.html',
 })
@@ -21,6 +22,8 @@ export class ReservationFormComponent implements OnInit {
   
   hardware = '';
   software = '';
+  softwareSelection = '';
+  customSoftware = '';
 
   hardwareList: any[] = [];
   softwareList: any[] = [];
@@ -71,7 +74,22 @@ export class ReservationFormComponent implements OnInit {
     }
     
     this.reservationsService.getHardware(this.room, startIso, endIso).subscribe(data => this.hardwareList = data || []);
-    this.reservationsService.getSoftware(this.room).subscribe(data => this.softwareList = data || []);
+    this.reservationsService.getSoftware(this.room).subscribe(data => {
+      this.softwareList = data || [];
+      this.resolveSoftwareSelection();
+    });
+  }
+
+  resolveSoftwareSelection() {
+    if (this.software) {
+       const found = this.softwareList.find(s => s.name === this.software);
+       if (found) {
+         this.softwareSelection = this.software;
+       } else {
+         this.softwareSelection = 'Other';
+         this.customSoftware = this.software;
+       }
+    }
   }
 
   loadReservationData(id: number) {
@@ -104,6 +122,7 @@ export class ReservationFormComponent implements OnInit {
         this.hardware = data.hardware;
         this.software = data.software;
         this.isHardwareOnly = data.isHardwareOnly || false;
+        this.resolveSoftwareSelection();
       },
       error: () => {
         alert('Failed to load reservation details');
@@ -114,13 +133,14 @@ export class ReservationFormComponent implements OnInit {
 
   saveReservation() {
     const finalActivity = this.activityType === 'Other' ? this.activityDesc : this.activityType;
+    const finalSoftware = this.softwareSelection === 'Other' ? this.customSoftware : this.softwareSelection;
 
     const reservationData = {
       startTime: new Date(this.startTime).toISOString(),
       endTime: new Date(this.endTime).toISOString(),
       activity: finalActivity,
       hardware: this.hardware,
-      software: this.software,
+      software: finalSoftware,
       room: this.room,
       isHardwareOnly: this.isHardwareOnly,
     };

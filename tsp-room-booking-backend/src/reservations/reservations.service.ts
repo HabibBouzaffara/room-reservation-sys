@@ -8,24 +8,45 @@ import { CreateReservationDto } from './dto/create-reservation.dto';
 export class ReservationsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private validateWorkingHours(start: Date, end: Date) {
+  private async validateWorkingHours(start: Date, end: Date) {
     const startDay = start.getDay();
     const endDay = end.getDay();
     if (startDay === 0 || startDay === 6 || endDay === 0 || endDay === 6) {
       throw new BadRequestException('Reservations are only allowed on working days (Mon-Fri)');
     }
 
+    let rules: any[] = [];
+    const rulesConfig = await this.prisma.sysConfig.findUnique({ where: { key: 'WORK_HOUR_RULES' } });
+    if (rulesConfig && rulesConfig.value) {
+      try { rules = JSON.parse(rulesConfig.value); } catch(e) {}
+    }
+
+    let dayStart = 8;
+    let dayEnd = 18;
+
+    for (const rule of rules) {
+        const rStart = new Date(rule.startDate);
+        rStart.setHours(0,0,0,0);
+        const rEnd = new Date(rule.endDate);
+        rEnd.setHours(23,59,59,999);
+        
+        if (start.getTime() >= rStart.getTime() && start.getTime() <= rEnd.getTime()) {
+            dayStart = rule.startHour;
+            dayEnd = rule.endHour;
+            break;
+        }
+    }
+
     const startHour = start.getHours();
     const endHour = end.getHours();
     const endMins = end.getMinutes();
 
-    if (startHour < 8 || startHour > 18 || (startHour === 18 && start.getMinutes() > 0)) {
-      throw new BadRequestException('Reservations are only allowed between 8 AM and 6 PM');
+    if (startHour < dayStart || startHour > dayEnd || (startHour === dayEnd && start.getMinutes() > 0)) {
+      throw new BadRequestException(`Reservations are only allowed between ${dayStart}:00 and ${dayEnd}:00`);
     }
-    if (endHour < 8 || endHour > 18 || (endHour === 18 && endMins > 0)) {
-       throw new BadRequestException('Reservations are only allowed between 8 AM and 6 PM');
+    if (endHour < dayStart || endHour > dayEnd || (endHour === dayEnd && endMins > 0)) {
+       throw new BadRequestException(`Reservations are only allowed between ${dayStart}:00 and ${dayEnd}:00`);
     }
-    // Also if it spans across the boundary, though max duration per UI usually isn't that large.
   }
 
   // Create a new reservation with 10-min buffer and history
@@ -33,7 +54,7 @@ export class ReservationsService {
     const start = new Date(dto.startTime);
     const end = new Date(dto.endTime);
 
-    this.validateWorkingHours(start, end);
+    await this.validateWorkingHours(start, end);
 
     // Minimum duration: 30 min
     const duration = (end.getTime() - start.getTime()) / 60000;
@@ -43,13 +64,14 @@ export class ReservationsService {
 
     // Check for overlapping NORMAL or BUFFER reservations in the same room
     if (!dto.isHardwareOnly) {
+      const effectiveEnd = new Date(end.getTime() + 10 * 60000); // include buffer
       const overlap = await this.prisma.reservation.findFirst({
         where: {
           AND: [
             { room: dto.room },
             { isHardwareOnly: false },
             {
-              startTime: { lt: end },
+              startTime: { lt: effectiveEnd },
               endTime: { gt: start },
             },
           ],
@@ -57,7 +79,7 @@ export class ReservationsService {
       });
 
       if (overlap) {
-        throw new BadRequestException(`Room ${dto.room} is already reserved for this time slot`);
+        throw new BadRequestException(`Room ${dto.room} is already reserved for this time slot (including 10m buffer)`);
       }
     }
 
@@ -187,7 +209,7 @@ export class ReservationsService {
     const newStart = dto.startTime ? new Date(dto.startTime) : res.startTime;
     const newEnd = dto.endTime ? new Date(dto.endTime) : res.endTime;
 
-    this.validateWorkingHours(newStart, newEnd);
+    await this.validateWorkingHours(newStart, newEnd);
 
     if (dto.startTime || dto.endTime) {
       const duration = (newEnd.getTime() - newStart.getTime()) / 60000;
@@ -199,18 +221,19 @@ export class ReservationsService {
       if (buffer) excludeIds.push(buffer.id);
 
       if (!res.isHardwareOnly) {
+        const effectiveEnd = new Date(newEnd.getTime() + 10 * 60000); // include buffer
         const overlap = await this.prisma.reservation.findFirst({
           where: {
             room: res.room,
             isHardwareOnly: false,
             id: { notIn: excludeIds },
-            startTime: { lt: newEnd },
+            startTime: { lt: effectiveEnd },
             endTime: { gt: newStart },
           },
         });
 
         if (overlap) {
-          throw new BadRequestException(`Room ${res.room} is already reserved for this time slot`);
+          throw new BadRequestException(`Room ${res.room} is already reserved for this time slot (including 10m buffer)`);
         }
       }
     }
@@ -293,9 +316,23 @@ export class ReservationsService {
       throw new BadRequestException('You cannot delete this reservation');
     }
 
+    const buffer = await this.prisma.reservation.findFirst({
+      where: {
+        startTime: res.endTime,
+        room: res.room,
+        type: 'BUFFER',
+      },
+    });
+
     await this.prisma.reservation.delete({
       where: { id },
     });
+
+    if (buffer) {
+      await this.prisma.reservation.delete({
+        where: { id: buffer.id },
+      });
+    }
 
     await this.prisma.history.create({
       data: {

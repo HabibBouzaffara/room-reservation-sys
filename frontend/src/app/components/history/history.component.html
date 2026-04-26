@@ -1,43 +1,120 @@
-<div class="flex justify-between items-center" style="margin-bottom: 2rem;">
-  <h2>System History logs</h2>
-</div>
+<div class="history-container animate-fade-in">
 
-<div class="card-grid" style="grid-template-columns: 1fr;">
-  <div class="card glass-panel" *ngFor="let log of historyLogs" style="padding: 1rem 2rem;">
-    <div class="flex justify-between items-center" style="margin-bottom: 0.5rem;">
-      <span class="badge" [ngClass]="{
-          'badge-success': log.action === 'CREATE_RESERVATION',
-          'badge-primary': log.action === 'UPDATE_RESERVATION',
-          'badge-warning': log.action === 'DELETE_RESERVATION'
-        }">
-        {{ log.action }}
-      </span>
-      <span style="font-size: 0.85rem; color: var(--text-secondary);">
-        {{ log.timestamp | date:'medium' }}
-      </span>
+  <!-- Header -->
+  <div class="history-header glass-panel">
+    <div class="header-content">
+      <h2 class="gradient-text">System Audit Trails</h2>
+      <p>Full lifecycle of each reservation — creation, modifications, and deletions.</p>
     </div>
+    <div class="stats-badge">{{ reservationGroups.length }} Reservations</div>
+  </div>
 
-    <div style="margin-bottom: 0.25rem;">
-      <strong>Reservation ID:</strong> {{ log.reservationId }}
-    </div>
-    <div style="margin-bottom: 0.25rem;">
-      <strong>Performed By:</strong> {{ log.performedBy }}
-    </div>
+  <!-- Cards Grid -->
+  <div class="history-grid">
+    <div class="slot-card glass-panel animate-fade-in"
+         *ngFor="let group of reservationGroups; let i = index"
+         [style.animation-delay]="(i * 0.05) + 's'">
 
-    <div class="flex gap-4" style="margin-top: 1rem;" *ngIf="log.action !== 'DELETE_RESERVATION'">
-      <div style="flex: 1; background: var(--input-bg); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 8px;">
-        <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">Old Value</h4>
-        <pre style="margin: 0; font-size: 0.8rem; overflow: auto; color: var(--text-secondary);">{{ log.oldValue | json }}</pre>
+      <!-- ── Card Top Bar ── -->
+      <div class="card-topbar">
+        <div class="card-topbar-left">
+          <span class="room-badge">{{ group.room }}</span>
+          <span class="res-id">#{{ group.reservationId }}</span>
+        </div>
+        <span class="event-count">{{ group.events.length }} event{{ group.events.length > 1 ? 's' : '' }}</span>
       </div>
 
-      <div style="flex: 1; background: var(--input-bg); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 8px;">
-        <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">New Value</h4>
-        <pre style="margin: 0; font-size: 0.8rem; overflow: auto; color: var(--text-color);">{{ log.newValue | json }}</pre>
-      </div>
+      <!-- ── Event Body (paginated) ── -->
+      <ng-container *ngIf="currentEvent(group) as ev">
+
+        <!-- Action Badge + Timestamp row -->
+        <div class="event-meta-row">
+          <span class="badge"
+                [ngClass]="{
+                  'badge-success': ev.isCreation,
+                  'badge-primary': ev.isModification,
+                  'badge-danger':  ev.isSuppression
+                }">
+            {{ ev.isCreation ? '✦ Created' : ev.isModification ? '✎ Modified' : '✕ Deleted' }}
+          </span>
+          <span class="log-time">{{ ev.timestamp | date:'medium' }}</span>
+        </div>
+
+        <!-- People Row -->
+        <div class="people-row">
+          <div class="person-chip">
+            <span class="chip-label">Owner</span>
+            <span class="chip-value">{{ ev.ownerName }}</span>
+          </div>
+          <div class="person-chip" *ngIf="ev.isModification || ev.isSuppression">
+            <span class="chip-label" [style.color]="ev.isSuppression ? 'var(--danger-color)' : 'var(--primary-color)'">
+              {{ ev.isSuppression ? 'Deleted By' : 'Modified By' }}
+            </span>
+            <span class="chip-value">{{ ev.modifierName }}</span>
+          </div>
+        </div>
+
+        <!-- Timeslot diff -->
+        <div class="timeslot-row">
+          <!-- Original (only shown for modifications) -->
+          <div class="ts-box ts-old" *ngIf="ev.isModification">
+            <div class="ts-label">Original</div>
+            <div class="ts-times">
+              <div class="ts-time-line">
+                <span class="ts-icon">⏱</span>
+                <span>{{ ev.oldRes?.startTime | date:'shortTime' }}</span>
+                <span class="ts-dash">→</span>
+                <span>{{ ev.oldRes?.endTime | date:'shortTime' }}</span>
+              </div>
+              <div class="ts-date">{{ ev.oldRes?.startTime | date:'mediumDate' }}</div>
+              <div class="ts-activity" *ngIf="ev.oldRes?.activity">📌 {{ ev.oldRes.activity }}</div>
+            </div>
+          </div>
+
+          <!-- Arrow divider -->
+          <div class="ts-arrow" *ngIf="ev.isModification">▶</div>
+
+          <!-- New / Current / Deleted -->
+          <div class="ts-box"
+               [ngClass]="ev.isModification ? 'ts-new' : ev.isSuppression ? 'ts-old' : 'ts-create'">
+            <div class="ts-label">
+              {{ ev.isCreation ? 'Booked' : ev.isModification ? 'Changed To' : 'Was' }}
+            </div>
+            <div class="ts-times">
+              <div class="ts-time-line">
+                <span class="ts-icon">⏱</span>
+                <span>{{ (ev.newRes || ev.oldRes)?.startTime | date:'shortTime' }}</span>
+                <span class="ts-dash">→</span>
+                <span>{{ (ev.newRes || ev.oldRes)?.endTime | date:'shortTime' }}</span>
+              </div>
+              <div class="ts-date">{{ (ev.newRes || ev.oldRes)?.startTime | date:'mediumDate' }}</div>
+              <div class="ts-activity" *ngIf="(ev.newRes || ev.oldRes)?.activity">
+                📌 {{ (ev.newRes || ev.oldRes)?.activity }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Pagination controls ── -->
+        <div class="pagination-row" *ngIf="group.events.length > 1">
+          <button class="pag-btn" (click)="prevEvent(group)" [disabled]="group.pageIndex === 0">‹</button>
+          <span class="pag-indicator">
+            <span *ngFor="let e of group.events; let pi = index"
+                  class="pag-dot"
+                  [class.active]="pi === group.pageIndex"></span>
+          </span>
+          <button class="pag-btn" (click)="nextEvent(group)" [disabled]="group.pageIndex === group.events.length - 1">›</button>
+        </div>
+
+      </ng-container>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="reservationGroups.length === 0" class="empty-state glass-panel animate-fade-in" style="grid-column: 1 / -1;">
+      <div class="empty-icon">📭</div>
+      <h3>No Activity Yet</h3>
+      <p>There are no historical logs recorded in the system.</p>
     </div>
   </div>
 
-  <div *ngIf="historyLogs.length === 0" style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
-    <p>No history logs available.</p>
-  </div>
 </div>

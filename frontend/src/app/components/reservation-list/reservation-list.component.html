@@ -7,10 +7,13 @@
       Room {{ rm }}
     </button>
   </div>
-  <button class="btn" routerLink="/reservations/new" [queryParams]="{ room: selectedRoom }">Book a Room</button>
+  <div class="flex gap-2">
+    <button class="btn btn-secondary" (click)="jumpToToday()">Today</button>
+    <button class="btn" routerLink="/reservations/new" [queryParams]="{ room: selectedRoom }">Book a Room</button>
+  </div>
 </div>
 
-<div class="calendar-scroll-container">
+<div class="calendar-scroll-container" (scroll)="onScroll($event)" #calendarScroll>
   <div class="calendar-wrapper">
     <!-- Time Labels Column -->
     <div class="time-column">
@@ -53,35 +56,157 @@
                 <!-- Background grid lines -->
                 <div class="grid-line" *ngFor="let t of timeLabels" [style.height.px]="60 * PIXELS_PER_MINUTE"></div>
                 
-                <!-- Reservations -->
-                <div *ngFor="let r of d.reservations" 
-                     class="reservation-card"
-                     [ngClass]="r.type === 'BUFFER' ? 'res-buffer' : (r.isHardwareOnly ? 'res-hw-only' : 'res-normal')"
-                     [style.top.px]="getTopPos(r)"
-                     [style.height.px]="getHeight(r)">
+                 <!-- Reservations -->
+                 <div *ngFor="let r of d.reservations" 
+                      class="reservation-card"
+                      [ngClass]="r.type === 'OUT_OF_OFFICE' ? 'res-ooo' : (r.type === 'BUFFER' ? 'res-buffer' : (r.isHardwareOnly ? 'res-hw-only' : 'res-normal'))"
+                      [style.top.px]="getTopPos(r)"
+                      [style.height.px]="getHeight(r)"
+                      [style.border-left-color]="r.type === 'NORMAL' ? getActivityColor(r.activity) : null"
+                      [style.background]="r.type === 'NORMAL' ? getActivityBg(r.activity) : null">
                      
-                   <div *ngIf="r.type === 'BUFFER'; else normalContent" class="buffer-content">
+                   <div *ngIf="r.type === 'BUFFER'" class="buffer-content">
                       TSP Buffer
                    </div>
-                   <ng-template #normalContent>
-                      <div class="res-title" [title]="r.activity">
-                         <span *ngIf="r.isHardwareOnly" style="color: var(--warning-color, #fbbf24)">[HW] </span>
-                         {{ r.activity }}
+                   <div *ngIf="r.type === 'OUT_OF_OFFICE'" class="ooo-content" style="display:flex; justify-content:center; align-items:center; height:100%; font-size: 0.75rem; letter-spacing: 1px; color: var(--text-secondary); opacity: 0.5;">
+                      CLOSED
+                   </div>
+                   <ng-container *ngIf="r.type === 'NORMAL' || r.isHardwareOnly">
+                      <!-- Always-visible compact label (single line) -->
+                      <div class="res-compact-label" style="font-size: 1rem; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        <span *ngIf="r.isHardwareOnly" class="hw-badge">HW</span>
+                        {{ r.user?.name || 'Unknown User' }}
                       </div>
-                      <div class="res-body">{{ r.startTime | date:'shortTime' }} - {{ r.endTime | date:'shortTime' }}</div>
-                      <div class="res-body">User: {{ r.user?.name || 'TSP System' }}</div>
-                      <div class="res-body" *ngIf="getHeight(r) > 50">HW: {{ r.hardware }}</div>
-                      <div class="res-body" *ngIf="getHeight(r) > 65">SW: {{ r.software }}</div>
-                      <div class="res-actions" *ngIf="canModify(r)">
-                         <button (click)="editReservation(r.id)" title="Edit">✎</button>
-                         <button (click)="deleteReservation(r.id, $event)" title="Cancel">✖</button>
+                      <!-- Time and activity shown only if tall enough -->
+                      <div class="res-body res-time-line" *ngIf="getHeight(r) > 28" style="font-size: 0.85rem;">
+                        {{ r.activity }} <span *ngIf="r.software && r.software !== '-'">| {{ r.software }}</span> | {{ r.startTime | date:'shortTime' }} – {{ r.endTime | date:'shortTime' }}
                       </div>
-                   </ng-template>
-                </div>
-             </div>
+                      
+                      <!-- Quick buttons on the card directly, if tall enough -->
+                      <div class="res-slot-actions" *ngIf="getHeight(r) > 45 && canModify(r)" style="position: absolute; bottom: 2px; right: 2px; display: flex; gap: 2px;">
+                         <button (click)="editReservation(r.id); $event.stopPropagation()" title="Edit" style="font-size: 1.0rem; padding: 0; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; opacity: 0.8; line-height: 1;">✎</button>
+                         <button (click)="openHistoryModal(r, $event); $event.stopPropagation()" title="View History" style="font-size: 1.0rem; padding: 0; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; opacity: 0.8; line-height: 1;">🕑</button>
+                         <button *ngIf="isAdmin" (click)="deleteReservation(r.id, $event); $event.stopPropagation()" title="Delete" style="font-size: 1.0rem; padding: 0; border: none; background: transparent; color: var(--danger-color); cursor: pointer; opacity: 0.8; line-height: 1;">✖</button>
+                      </div>
+
+                      <!-- Floating popover shown on hover (always fully readable) -->
+                      <div class="res-popover">
+                        <div class="pop-title" style="font-size: 1.1rem;">
+                          <span *ngIf="r.isHardwareOnly" class="hw-badge">HW</span>
+                          {{ r.user?.name || 'Unknown User' }}
+                        </div>
+                        <div class="pop-row" style="font-size: 0.95rem;">📌 Activity: {{ r.activity }}</div>
+                        <div class="pop-row" style="font-size: 0.95rem;">⏱ {{ r.startTime | date:'shortTime' }} – {{ r.endTime | date:'shortTime' }}</div>
+                        <div class="pop-row" *ngIf="r.hardware && r.hardware !== '-'">🖥 {{ r.hardware }}</div>
+                        <div class="pop-row" *ngIf="r.software && r.software !== '-'">💿 {{ r.software }}</div>
+                        <div class="pop-actions">
+                          <button *ngIf="canModify(r)" (click)="editReservation(r.id)" title="Edit" class="pop-btn">✎ Edit</button>
+                          <button *ngIf="canModify(r)" (click)="deleteReservation(r.id, $event)" title="Cancel" class="pop-btn pop-btn-danger">✖ Delete</button>
+                          <button (click)="openHistoryModal(r, $event)" title="View History" class="pop-btn pop-btn-history">🕑 History</button>
+                        </div>
+                      </div>
+                   </ng-container>
+                 </div>
+              </div>
           </div>
        </div>
     </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ HISTORY MODAL ═══════════════ -->
+<div class="modal-backdrop" *ngIf="historyModalOpen" (click)="closeHistoryModal()">
+  <div class="modal-box glass-panel" (click)="$event.stopPropagation()">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div>
+        <h3 style="margin: 0;">Slot History</h3>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);"
+              *ngIf="historyModalRes">
+          {{ historyModalRes.activity }} · {{ historyModalRes.startTime | date:'mediumDate' }}
+        </span>
+      </div>
+      <button class="modal-close" (click)="closeHistoryModal()">✕</button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="historyLoading" style="text-align:center; padding: 2rem; color: var(--text-secondary);">Loading…</div>
+
+    <!-- No events -->
+    <div *ngIf="!historyLoading && historyEvents.length === 0"
+         style="text-align:center; padding: 2rem; color: var(--text-secondary);">No history available.</div>
+
+    <!-- Events -->
+    <ng-container *ngIf="!historyLoading && historyEvents.length > 0 && currentHistoryEvent() as ev">
+
+      <!-- Event badge + time -->
+      <div class="modal-event-meta">
+        <span class="badge"
+              [ngClass]="{
+                'badge-success': ev.isCreation,
+                'badge-primary': ev.isModification,
+                'badge-danger':  ev.isSuppression
+              }">
+          {{ ev.isCreation ? '✦ Created' : ev.isModification ? '✎ Modified' : '✕ Deleted' }}
+        </span>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);">{{ ev.timestamp | date:'medium' }}</span>
+      </div>
+
+      <!-- Actor -->
+      <div class="modal-actor">
+        <span class="chip-label"
+              [style.color]="ev.isCreation ? 'var(--success-color)' : ev.isModification ? 'var(--primary-color)' : 'var(--danger-color)'">
+          {{ ev.isCreation ? 'Created by' : ev.isModification ? 'Modified by' : 'Deleted by' }}
+        </span>
+        <span class="chip-value"> {{ ev.actorName }}</span>
+      </div>
+
+      <!-- Timeslot diff -->
+      <div class="modal-timeslots">
+        <!-- Old slot (modifications only) -->
+        <div class="ts-box ts-old" *ngIf="ev.isModification">
+          <div class="ts-label">Before</div>
+          <div class="ts-time-line">
+            ⏱ {{ ev.oldRes?.startTime | date:'shortTime' }} → {{ ev.oldRes?.endTime | date:'shortTime' }}
+          </div>
+          <div class="ts-date">{{ ev.oldRes?.startTime | date:'mediumDate' }}</div>
+          <div *ngIf="ev.oldRes?.activity" class="ts-activity">📌 {{ ev.oldRes.activity }}</div>
+          <div *ngIf="ev.oldRes?.software && ev.oldRes.software !== '-'" class="ts-activity" style="margin-top: 2px;">💿 {{ ev.oldRes.software }}</div>
+        </div>
+
+        <div class="ts-arrow" *ngIf="ev.isModification">▶</div>
+
+        <!-- New/Current slot -->
+        <div class="ts-box"
+             [ngClass]="ev.isModification ? 'ts-new' : ev.isSuppression ? 'ts-old' : 'ts-create'">
+          <div class="ts-label">
+            {{ ev.isCreation ? 'Booked' : ev.isModification ? 'After' : 'Was' }}
+          </div>
+          <div class="ts-time-line">
+            ⏱ {{ (ev.newRes || ev.oldRes)?.startTime | date:'shortTime' }}
+              → {{ (ev.newRes || ev.oldRes)?.endTime | date:'shortTime' }}
+          </div>
+          <div class="ts-date">{{ (ev.newRes || ev.oldRes)?.startTime | date:'mediumDate' }}</div>
+          <div *ngIf="(ev.newRes || ev.oldRes)?.activity" class="ts-activity">
+            📌 {{ (ev.newRes || ev.oldRes)?.activity }}
+          </div>
+          <div *ngIf="(ev.newRes || ev.oldRes)?.software && (ev.newRes || ev.oldRes)?.software !== '-'" class="ts-activity" style="margin-top: 2px;">
+            💿 {{ (ev.newRes || ev.oldRes)?.software }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="modal-pagination" *ngIf="historyEvents.length > 1">
+        <button class="pag-btn" (click)="prevHistoryPage()" [disabled]="historyPageIndex === 0">‹</button>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);">
+          {{ historyPageIndex + 1 }} / {{ historyEvents.length }}
+        </span>
+        <button class="pag-btn" (click)="nextHistoryPage()" [disabled]="historyPageIndex === historyEvents.length - 1">›</button>
+      </div>
+    </ng-container>
 
   </div>
 </div>

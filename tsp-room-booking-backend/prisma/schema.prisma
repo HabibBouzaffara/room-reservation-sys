@@ -62,6 +62,12 @@ model Hardware {
   @@unique([name, room])
 }
 
+model SysConfig {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String
+}
+
 model Software {
   id   Int    @id @default(autoincrement())
   name String
