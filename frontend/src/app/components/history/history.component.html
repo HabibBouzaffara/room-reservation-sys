@@ -117,4 +117,15 @@
     </div>
   </div>
 
+  <!-- Global Pagination -->
+  <div class="global-pagination" *ngIf="totalPages > 1">
+    <button class="global-pag-btn" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+      ‹ Previous
+    </button>
+    <span class="global-pag-info">Page {{ currentPage }} of {{ totalPages }} ({{ totalItems }} total events)</span>
+    <button class="global-pag-btn" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+      Next ›
+    </button>
+  </div>
+
 </div>

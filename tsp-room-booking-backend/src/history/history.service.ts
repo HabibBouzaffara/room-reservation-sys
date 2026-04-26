@@ -6,9 +6,12 @@ import { Role } from '@prisma/client';
 export class HistoryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll() {
-    return this.prisma.history.findMany({
+  async findAll(page: number = 1, limit: number = 20) {
+    const skip = (page - 1) * limit;
+    const items = await this.prisma.history.findMany({
       orderBy: { timestamp: 'desc' },
+      skip,
+      take: limit,
       select: {
         id: true,
         action: true,
@@ -19,6 +22,14 @@ export class HistoryService {
         newValue: true,
       },
     });
+    const total = await this.prisma.history.count();
+    return {
+      items,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    };
   }
 
   /** Return history for a single reservation.

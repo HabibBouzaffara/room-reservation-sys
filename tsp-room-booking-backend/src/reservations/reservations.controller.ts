@@ -42,8 +42,12 @@ export class ReservationsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Query('room') room?: string) {
-    return this.reservationsService.findAll(room);
+  findAll(
+    @Query('room') room?: string,
+    @Query('start') start?: string,
+    @Query('end') end?: string
+  ) {
+    return this.reservationsService.findAll(room, start, end);
   }
 
   @UseGuards(JwtAuthGuard)

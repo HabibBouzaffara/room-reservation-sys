@@ -153,9 +153,22 @@ export class ReservationsService {
     return reservation;
   }
 
-  // Return all reservations with user info, optionally filtered by room
-  async findAll(room?: string) {
-    const where = room ? { room } : {};
+  // Return all reservations with user info, optionally filtered by room and date range
+  async findAll(room?: string, start?: string, end?: string) {
+    const where: any = {};
+    if (room) where.room = room;
+    
+    if (start || end) {
+       if (start && end) {
+          where.startTime = { lte: new Date(end) };
+          where.endTime = { gte: new Date(start) };
+       } else if (start) {
+          where.endTime = { gte: new Date(start) };
+       } else if (end) {
+          where.startTime = { lte: new Date(end) };
+       }
+    }
+
     return this.prisma.reservation.findMany({
       where,
       orderBy: { startTime: 'asc' },

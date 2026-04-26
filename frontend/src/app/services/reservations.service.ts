@@ -14,8 +14,11 @@ export class ReservationsService {
     return this.http.post(this.apiUrl, data);
   }
 
-  getReservations(room: string = 'IPB'): Observable<any> {
-    return this.http.get(`${this.apiUrl}?room=${room}`);
+  getReservations(room: string = 'IPB', start?: string, end?: string): Observable<any> {
+    let params = new HttpParams().set('room', room);
+    if (start) params = params.set('start', start);
+    if (end) params = params.set('end', end);
+    return this.http.get(this.apiUrl, { params });
   }
 
   getReservation(id: number): Observable<any> {
@@ -30,8 +33,9 @@ export class ReservationsService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  getHistory(): Observable<any> {
-    return this.http.get('http://localhost:3000/history');
+  getHistory(page: number = 1, limit: number = 20): Observable<any> {
+    let params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
+    return this.http.get('http://localhost:3000/history', { params });
   }
 
   getReservationHistory(reservationId: number): Observable<any> {

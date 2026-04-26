@@ -325,6 +325,35 @@
   }
   .ts-arrow {
     transform: rotate(90deg);
-    justify-content: center;
   }
+}
+
+/* ─── Global Pagination ─────────────────────────────────────────── */
+.global-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 30px;
+  padding: 15px;
+}
+.global-pag-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.global-pag-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+.global-pag-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.global-pag-info {
+  font-size: 0.95rem;
+  opacity: 0.8;
 }

@@ -89,7 +89,17 @@ export class ReservationListComponent implements OnInit {
   }
 
   loadReservations() {
-    this.reservationsService.getReservations(this.selectedRoom).subscribe({
+    const today = new Date(this.baseDate);
+    const dayOfWeek = today.getDay();
+    const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) + (this.weekOffset * 7); 
+    const startMonday = new Date(today.getFullYear(), today.getMonth(), diff);
+    startMonday.setHours(0,0,0,0);
+    
+    const endFriday = new Date(startMonday);
+    endFriday.setDate(endFriday.getDate() + 27); // + 3 weeks + 6 days
+    endFriday.setHours(23,59,59,999);
+
+    this.reservationsService.getReservations(this.selectedRoom, startMonday.toISOString(), endFriday.toISOString()).subscribe({
       next: (data) => {
         this.reservations = data;
         this.buildCalendar();
@@ -226,16 +236,21 @@ export class ReservationListComponent implements OnInit {
     this.weekOffset += diff;
     this.updateEffectiveHours();
     this.generateTimeLabels();
-    this.buildCalendar();
+    this.loadReservations();
   }
 
   jumpToToday() {
     this.weekOffset = -1;
     this.updateEffectiveHours();
     this.generateTimeLabels();
+    
+    // Use cached/old reservations just to build skeleton and measure scroll layout synchronously
     this.buildCalendar();
     this.cdr.detectChanges();
     this.scrollToCurrentDay();
+    
+    // Now fetch real data asynchronously
+    this.loadReservations();
   }
 
   isAutoScrolling = false;
@@ -250,13 +265,16 @@ export class ReservationListComponent implements OnInit {
        this.weekOffset--;
        this.updateEffectiveHours();
        this.generateTimeLabels();
-       this.buildCalendar();
+       this.buildCalendar(); // Build skeleton synchronously
        
        this.cdr.detectChanges();
        
        // Reposition the scroll synchronously so the user stays on the week they were looking at
        el.scrollLeft += 1260; // width of one inserted week
        this.isAutoScrolling = false;
+       
+       // Fetch accurate data async
+       this.loadReservations();
     }
   }
 

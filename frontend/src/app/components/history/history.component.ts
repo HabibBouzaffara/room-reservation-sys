@@ -28,13 +28,21 @@ export class HistoryComponent implements OnInit {
     });
   }
 
+  currentPage = 1;
+  totalPages = 1;
+  totalItems = 0;
+
   loadHistory() {
-    this.reservationsService.getHistory().subscribe({
-      next: (data: any[]) => {
+    this.reservationsService.getHistory(this.currentPage, 20).subscribe({
+      next: (response: any) => {
+        this.totalItems = response.total;
+        this.totalPages = response.totalPages;
+        const data = response.items || [];
+        
         // Parse and filter buffers
         const parsed = data
-          .map(log => this.parseLog(log))
-          .filter(log => log.oldRes?.type !== 'BUFFER' && log.newRes?.type !== 'BUFFER');
+          .map((log: any) => this.parseLog(log))
+          .filter((log: any) => log.oldRes?.type !== 'BUFFER' && log.newRes?.type !== 'BUFFER');
 
         // Group by reservationId
         const groupMap: Record<number, any> = {};
@@ -115,5 +123,12 @@ export class HistoryComponent implements OnInit {
 
   nextEvent(group: any) {
     if (group.pageIndex < group.events.length - 1) group.pageIndex++;
+  }
+
+  changePage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadHistory();
+    }
   }
 }
