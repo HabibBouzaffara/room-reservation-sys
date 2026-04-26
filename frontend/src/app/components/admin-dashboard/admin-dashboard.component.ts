@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ReservationsService } from '../../services/reservations.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   standalone: false,
@@ -22,8 +23,12 @@ export class AdminDashboardComponent implements OnInit {
   newRuleStartHour: number = 8;
   newRuleEndHour: number = 17;
 
-  rooms: string[] = ['IPB', 'BCP', 'BDC'];
+  rooms: string[] = ['IPB', 'BCP1', 'BCP2', 'BDC1', 'BDC2'];
   selectedRoom: string = 'IPB';
+  
+  exportRoom: string = 'IPB';
+  exportStart: string = '';
+  exportEnd: string = '';
 
   constructor(private reservationsService: ReservationsService) {}
 
@@ -115,5 +120,48 @@ export class AdminDashboardComponent implements OnInit {
 
   deleteSoftware(id: number) {
     this.reservationsService.deleteSoftware(id).subscribe(() => this.loadSoftware());
+  }
+
+  exportExcel() {
+    if (!this.exportStart || !this.exportEnd) {
+      alert('Please select start and end dates.');
+      return;
+    }
+    
+    this.reservationsService.getReservations(this.exportRoom).subscribe({
+      next: (data) => {
+        const start = new Date(this.exportStart);
+        start.setHours(0,0,0,0);
+        const end = new Date(this.exportEnd);
+        end.setHours(23,59,59,999);
+        
+        const filtered = data.filter((r: any) => {
+           const rStart = new Date(r.startTime);
+           return rStart >= start && rStart <= end;
+        });
+
+        if (filtered.length === 0) {
+           alert('No reservations found for this period.');
+           return;
+        }
+
+        const exportData = filtered.map((r: any) => ({
+           'Room': r.room || this.exportRoom,
+           'User': r.user?.name || 'Unknown',
+           'Activity': r.activity,
+           'Start Time': new Date(r.startTime).toLocaleString(),
+           'End Time': new Date(r.endTime).toLocaleString(),
+           'Hardware': r.hardware || '-',
+           'Software': r.software || '-',
+           'Is Hardware Only': r.isHardwareOnly ? 'Yes' : 'No'
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(exportData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Reservations');
+        XLSX.writeFile(wb, `reservations_${this.exportRoom}_${this.exportStart}_to_${this.exportEnd}.xlsx`);
+      },
+      error: () => alert('Error loading reservations for export')
+    });
   }
 }

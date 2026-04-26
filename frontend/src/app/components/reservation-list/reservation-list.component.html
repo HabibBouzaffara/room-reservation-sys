@@ -73,13 +73,19 @@
                    </div>
                    <ng-container *ngIf="r.type === 'NORMAL' || r.isHardwareOnly">
                       <!-- Always-visible compact label (single line) -->
-                      <div class="res-compact-label" style="font-size: 1rem; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                      <div class="res-compact-label" style="font-size: 0.95rem; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                         <span *ngIf="r.isHardwareOnly" class="hw-badge">HW</span>
                         {{ r.user?.name || 'Unknown User' }}
                       </div>
+                      
                       <!-- Time and activity shown only if tall enough -->
-                      <div class="res-body res-time-line" *ngIf="getHeight(r) > 28" style="font-size: 0.85rem;">
-                        {{ r.activity }} <span *ngIf="r.software && r.software !== '-'">| {{ r.software }}</span> | {{ r.startTime | date:'shortTime' }} – {{ r.endTime | date:'shortTime' }}
+                      <div class="res-body res-time-line" *ngIf="getHeight(r) > 28" style="font-size: 0.8rem; margin-top: 2px; display: flex; flex-direction: column; gap: 1px;">
+                        <div style="font-weight: 600; color: var(--text-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                           {{ r.activity }} <span *ngIf="r.software && r.software !== '-'" style="font-weight: normal; opacity: 0.8;">| 💿 {{ r.software }}</span>
+                        </div>
+                        <div *ngIf="getHeight(r) > 40" style="opacity: 0.75; font-family: monospace; font-size: 0.75rem;">
+                           {{ r.startTime | date:'shortTime' }} – {{ r.endTime | date:'shortTime' }}
+                        </div>
                       </div>
                       
                       <!-- Quick buttons on the card directly, if tall enough -->

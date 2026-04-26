@@ -103,4 +103,27 @@
       </div>
     </section>
   </div>
+
+  <!-- Excel Export Section -->
+  <div class="flex gap-4" style="margin-top: 1.5rem; margin-bottom: 2rem;">
+    <section class="admin-section" style="width: 100%;">
+      <h3>Export Reservations to Excel</h3>
+      <div class="config-input flex gap-2 items-center flex-wrap">
+        <label style="font-size: 0.85rem;">Room:</label>
+        <select [(ngModel)]="exportRoom" style="padding: 0.3rem; background: var(--input-bg); border: 1px solid var(--glass-border); color: var(--text-color); border-radius: 4px;">
+          <option *ngFor="let rm of rooms" [value]="rm">{{ rm }}</option>
+        </select>
+        
+        <label style="font-size: 0.85rem; margin-left: 1rem;">From:</label>
+        <input type="date" [(ngModel)]="exportStart" style="padding: 0.3rem;" />
+        
+        <label style="font-size: 0.85rem; margin-left: 1rem;">To:</label>
+        <input type="date" [(ngModel)]="exportEnd" style="padding: 0.3rem;" />
+        
+        <button class="btn" style="margin-left: 1rem; background-color: #10b981;" (click)="exportExcel()">
+          📥 Export to Excel
+        </button>
+      </div>
+    </section>
+  </div>
 </div>

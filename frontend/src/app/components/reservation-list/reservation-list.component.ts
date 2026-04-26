@@ -13,7 +13,7 @@ export class ReservationListComponent implements OnInit {
   reservations: any[] = [];
   currentUserId: number | null = null;
   isAdmin: boolean = false;
-  rooms: string[] = ['IPB', 'BCP', 'BDC'];
+  rooms: string[] = ['IPB', 'BCP1', 'BCP2', 'BDC1', 'BDC2'];
   selectedRoom: string = 'IPB';
 
   weeks: any[] = [];
