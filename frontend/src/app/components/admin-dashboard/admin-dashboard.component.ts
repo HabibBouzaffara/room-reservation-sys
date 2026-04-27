@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ReservationsService } from '../../services/reservations.service';
-import * as XLSX from 'xlsx-js-style';
+const XLSX = await import('xlsx-js-style');
 
 @Component({
   standalone: false,

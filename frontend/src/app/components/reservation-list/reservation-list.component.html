@@ -27,10 +27,16 @@
     
     <!-- Weeks -->
     <div class="week-group" *ngFor="let w of weeks; let i = index">
-       <div class="week-header">
-          <span style="font-size: 0.8rem; margin-right: 4px;">CW</span>
-          <input *ngIf="isAdmin" type="number" [value]="w.cw" (change)="updateWeek($any($event.target).value, i)" style="width: 70px; background: var(--input-bg); border: 1px solid var(--glass-border); color: var(--text-color); text-align: center; border-radius: 4px;" />
-          <span *ngIf="!isAdmin">{{ w.name }}</span>
+       <div class="week-header" style="position: relative; display: flex; justify-content: center; align-items: center;">
+          <button *ngIf="i === 0" (click)="loadPrevWeeks()" class="nav-soft-btn" style="position: absolute; left: 8px;" title="Load Previous 8 Weeks">‹ Prev</button>
+          
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 0.8rem; margin-right: 4px;">CW</span>
+            <input *ngIf="isAdmin" type="number" [value]="w.cw" (change)="updateWeek($any($event.target).value, i)" style="width: 70px; background: var(--input-bg); border: 1px solid var(--glass-border); color: var(--text-color); text-align: center; border-radius: 4px;" />
+            <span *ngIf="!isAdmin">{{ w.name }}</span>
+          </div>
+
+          <button *ngIf="i === weeks.length - 1" (click)="loadNextWeeks()" class="nav-soft-btn" style="position: absolute; right: 8px;" title="Load Next 8 Weeks">Next ›</button>
        </div>
        <div class="days-row">
           <div class="day-column" *ngFor="let d of w.days" [class.is-today]="isToday(d.date)">
@@ -81,7 +87,7 @@
                       <!-- Time and activity shown only if tall enough -->
                       <div class="res-body res-time-line" *ngIf="getHeight(r) > 28" style="font-size: 0.8rem; margin-top: 2px; display: flex; flex-direction: column; gap: 1px;">
                         <div style="font-weight: 600; color: var(--text-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                           {{ r.activity }} <span *ngIf="r.software && r.software !== '-'" style="font-weight: normal; opacity: 0.8;">| 💿 {{ r.software }}</span>
+                           {{ r.activity }} <span *ngIf="r.software && r.software !== '-'" style="font-weight: normal; opacity: 0.8;">| 💿 {{ r.software }}</span><span *ngIf="r.hardware && r.hardware !== '-'" style="font-weight: normal; opacity: 0.8;"> | 🖥 {{ r.hardware }}</span>
                         </div>
                         <div *ngIf="getHeight(r) > 40" style="opacity: 0.75; font-family: monospace; font-size: 0.75rem;">
                            {{ r.startTime | date:'shortTime' }} – {{ r.endTime | date:'shortTime' }}
@@ -179,6 +185,7 @@
           </div>
           <div class="ts-date">{{ ev.oldRes?.startTime | date:'mediumDate' }}</div>
           <div *ngIf="ev.oldRes?.activity" class="ts-activity">📌 {{ ev.oldRes.activity }}</div>
+          <div *ngIf="ev.oldRes?.hardware && ev.oldRes.hardware !== '-'" class="ts-activity" style="margin-top: 2px;">🖥 {{ ev.oldRes.hardware }}</div>
           <div *ngIf="ev.oldRes?.software && ev.oldRes.software !== '-'" class="ts-activity" style="margin-top: 2px;">💿 {{ ev.oldRes.software }}</div>
         </div>
 
@@ -197,6 +204,9 @@
           <div class="ts-date">{{ (ev.newRes || ev.oldRes)?.startTime | date:'mediumDate' }}</div>
           <div *ngIf="(ev.newRes || ev.oldRes)?.activity" class="ts-activity">
             📌 {{ (ev.newRes || ev.oldRes)?.activity }}
+          </div>
+          <div *ngIf="(ev.newRes || ev.oldRes)?.hardware && (ev.newRes || ev.oldRes)?.hardware !== '-'" class="ts-activity" style="margin-top: 2px;">
+            🖥 {{ (ev.newRes || ev.oldRes)?.hardware }}
           </div>
           <div *ngIf="(ev.newRes || ev.oldRes)?.software && (ev.newRes || ev.oldRes)?.software !== '-'" class="ts-activity" style="margin-top: 2px;">
             💿 {{ (ev.newRes || ev.oldRes)?.software }}

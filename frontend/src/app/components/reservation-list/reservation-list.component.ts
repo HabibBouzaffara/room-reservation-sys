@@ -23,7 +23,7 @@ export class ReservationListComponent implements OnInit {
   START_HOUR = 8;
   END_HOUR = 18;
 
-  weekOffset = -1;
+  weekOffset = -4;
   baseDate = new Date();
   
   isFirstLoad = true;
@@ -96,7 +96,7 @@ export class ReservationListComponent implements OnInit {
     startMonday.setHours(0,0,0,0);
     
     const endFriday = new Date(startMonday);
-    endFriday.setDate(endFriday.getDate() + 27); // + 3 weeks + 6 days
+    endFriday.setDate(endFriday.getDate() + 55); // + 7 weeks + 6 days = 8 weeks total
     endFriday.setHours(23,59,59,999);
 
     this.reservationsService.getReservations(this.selectedRoom, startMonday.toISOString(), endFriday.toISOString()).subscribe({
@@ -119,7 +119,7 @@ export class ReservationListComponent implements OnInit {
     const startMonday = new Date(today.getFullYear(), today.getMonth(), diff);
     startMonday.setHours(0,0,0,0);
 
-    for (let w = 0; w < 4; w++) {
+    for (let w = 0; w < 8; w++) {
       const weekDate = new Date(startMonday);
       weekDate.setDate(weekDate.getDate() + (w * 7));
       
@@ -208,8 +208,8 @@ export class ReservationListComponent implements OnInit {
     const weekWidth = 1260; // 5 days * 252px approx
     const dayWidth = 252;
     
-    // We start at CW-1. So the offset to the start of the current week (CW) is:
-    const currentWeekStartOffset = timeColumnWidth + weekWidth;
+    // We start at CW-4. So the offset to the start of the current week (CW) is:
+    const currentWeekStartOffset = timeColumnWidth + (weekWidth * 4);
     
     let targetOffset = 0;
 
@@ -240,7 +240,7 @@ export class ReservationListComponent implements OnInit {
   }
 
   jumpToToday() {
-    this.weekOffset = -1;
+    this.weekOffset = -4;
     this.updateEffectiveHours();
     this.generateTimeLabels();
     
@@ -253,29 +253,22 @@ export class ReservationListComponent implements OnInit {
     this.loadReservations();
   }
 
-  isAutoScrolling = false;
-  onScroll(event: Event) {
-    if (this.isAutoScrolling) return;
+  loadPrevWeeks() {
+    this.weekOffset -= 8;
+    this.updateEffectiveHours();
+    this.generateTimeLabels();
+    this.loadReservations();
+  }
 
-    const el = event.target as HTMLElement;
-    
-    // Scrolled perfectly to the left edge
-    if (el.scrollLeft <= 5) {
-       this.isAutoScrolling = true;
-       this.weekOffset--;
-       this.updateEffectiveHours();
-       this.generateTimeLabels();
-       this.buildCalendar(); // Build skeleton synchronously
-       
-       this.cdr.detectChanges();
-       
-       // Reposition the scroll synchronously so the user stays on the week they were looking at
-       el.scrollLeft += 1260; // width of one inserted week
-       this.isAutoScrolling = false;
-       
-       // Fetch accurate data async
-       this.loadReservations();
-    }
+  loadNextWeeks() {
+    this.weekOffset += 8;
+    this.updateEffectiveHours();
+    this.generateTimeLabels();
+    this.loadReservations();
+  }
+
+  onScroll(event: Event) {
+    // Infinite scroll disabled as per request
   }
 
   isToday(date: Date): boolean {
